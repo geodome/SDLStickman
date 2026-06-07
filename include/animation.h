@@ -7,22 +7,23 @@
 #include <format>
 #include <SDL2/SDL.h>
 #include "exceptions.h"
+#include "gameobject.h"
 
 class Animation {
     const int DELAY{100}, WIDTH{403}, HEIGHT{363};
     SDL_Window* gWindow;
     SDL_Surface* gSurface;
     std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&,bool&)>>> handlers{};
+    std::vector<GameObject*> gObjects;
 public:
     Animation();
     ~Animation();
     void main_loop();
     void register_handler(uint32_t, std::function<void(SDL_Event, bool&, bool&)>);
     void handle_events(bool&, bool&);
-    void update() {};
-    void render() {};
-    void add_game_object();
-    
+    void draw();
+    void render();
+    void add_game_object(GameObject*);
 };
 
 Animation::Animation() {
@@ -70,12 +71,25 @@ void Animation::main_loop() {
     while(!quit) {
         handle_events(quit, suspended);
         if(!suspended) {
-            update();
+            draw();
             render();
         }
         SDL_Delay(DELAY);
     }
 }
 
+void Animation::add_game_object(GameObject* g) {
+    gObjects.push_back(g);
+}
+
+void Animation::draw() {
+    for(auto obj: gObjects) {
+        obj->draw(gSurface);
+    }
+}
+
+void Animation::render() {
+    SDL_UpdateWindowSurface(gWindow);
+}
 
 #endif
