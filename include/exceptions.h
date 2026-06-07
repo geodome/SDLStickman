@@ -1,3 +1,6 @@
+#ifndef EXCEPTIONS_H
+#define EXCEPTIONS_H
+
 #include <exception>
 #include <string>
 
@@ -32,3 +35,5 @@ class SDL_Cannot_Load_Media: public myexception {
                 std::string:file},
                 std::string{msg})) {};
 }
+
+#endif
