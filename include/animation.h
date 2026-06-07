@@ -10,7 +10,7 @@
 #include "gameobject.h"
 
 class Animation {
-    const int DELAY{100}, WIDTH{403}, HEIGHT{363};
+    const int DELAY{100}, WIDTH{400}, HEIGHT{366};
     SDL_Window* gWindow;
     SDL_Surface* gSurface;
     std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&,bool&)>>> handlers{};
@@ -32,12 +32,14 @@ Animation::Animation() {
     }
     gWindow = SDL_CreateWindow("Stickman Animation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
     if(gWindow == nullptr) {
+        SDL_Quit();
         throw SDL_Cannot_Init(SDL_GetError());
     }
     
     gSurface = SDL_GetWindowSurface(gWindow);
     if(gSurface == nullptr) {
         SDL_DestroyWindow(gWindow);
+        SDL_Quit();
         throw SDL_Cannot_Init(SDL_GetError());
     }
     
@@ -86,6 +88,11 @@ void Animation::main_loop() {
 
 void Animation::add_game_object(GameObject* g) {
     gObjects.push_back(g);
+    for(auto& [event_type, handlers]: g->get_handlers()) {
+        for(auto f: handlers) {
+            register_handler(event_type, f);
+        }
+    }
 }
 
 void Animation::draw() {
