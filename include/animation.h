@@ -37,13 +37,19 @@ Animation::Animation() {
     
     gSurface = SDL_GetWindowSurface(gWindow);
     if(gSurface == nullptr) {
+        SDL_DestroyWindow(gWindow);
         throw SDL_Cannot_Init(SDL_GetError());
     }
+    
+    add_game_object(new Stickman());
 }
 
 Animation::~Animation() {
-    if(gSurface != nullptr) SDL_FreeSurface(gSurface);
-    if(gWindow != nullptr)  SDL_DestroyWindow(gWindow);
+    for(auto ptr: gObjects) {
+        delete ptr;
+    }
+    SDL_FreeSurface(gSurface);
+    SDL_DestroyWindow(gWindow);
     SDL_Quit();
 }
 
