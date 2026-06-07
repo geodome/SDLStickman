@@ -14,7 +14,7 @@ public:
     std::string what() {
         return message;
     }
-}
+};
 
 class SDL_Cannot_Init: public myexception {
 public:
@@ -22,7 +22,7 @@ public:
     myexception("SDL Cannot Init", msg) {};
     SDL_Cannot_Init(char* msg):
     myexception("SDL Cannot Init", msg) {};
-}
+};
 
 class SDL_Cannot_Load_Media: public myexception {
     SDL_Cannot_Load_Media(char* file, std::string msg):
@@ -34,6 +34,6 @@ class SDL_Cannot_Load_Media: public myexception {
                 std::format("{} : {}",
                 std::string:file},
                 std::string{msg})) {};
-}
+};
 
 #endif
