@@ -37,6 +37,21 @@ void Animation::handle_events(bool& quit, bool& suspended) {
     }
 }
 
+void Animation::main_loop() {
+    bool quit{false}, suspended{false};
+    register_handler(SDL_QUIT, [] (SDL_Event e, bool& quit, bool& suspended) {
+        quit = true;
+        suspended = true;
+    });
+    while(!quit) {
+        handle_events(quit, suspended);
+        if(!suspended) {
+            update();
+            render();
+        }
+        SDL_Delay(DELAY);
+    }
+}
 
 
 #endif
