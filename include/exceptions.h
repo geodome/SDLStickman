@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <string>
+#include <format>
 
 class myexception: public std::exception {
     std::string message;
