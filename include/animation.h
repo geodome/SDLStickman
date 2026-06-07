@@ -2,6 +2,7 @@
 #define ANIMATION_H
 
 #include <SDL2/SDL.h>
+#include "exceptions.h"
 
 //struct SDL_Event {};
 
@@ -21,6 +22,21 @@ public:
     void add_game_object();
     
 };
+
+Animation::Animation() {
+    if(SDL_Init(SDL_INIT_VIDEO) < 0) {
+        throw SDL_Cannot_Init(SDL_GetError());
+    }
+    gWindow = SDL_CreateWindow("Stickman Animation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
+    if(gWindow == nullptr) {
+        throw SDL_Cannot_Init(SDL_GetError());
+    }
+    
+    gSurface = SDL_GetWindowSurface(gWindow);
+    if(gSurface == nullptr) {
+        throw SDL_Cannot_Init(SDL_GetError());
+    }
+}
 
 void Animation::register_handler(uint32_t event_type, std::function<void(SDL_Event, bool&, bool&)> f) {
     handlers[event_type].push_back(f);
