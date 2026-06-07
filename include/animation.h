@@ -1,10 +1,12 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
+#include <map>
+#include <functional>
+#include <vector>
+#include <format>
 #include <SDL2/SDL.h>
 #include "exceptions.h"
-
-//struct SDL_Event {};
 
 class Animation {
     const int DELAY{100}, WIDTH{403}, HEIGHT{363};
