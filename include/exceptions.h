@@ -28,16 +28,11 @@ public:
 };
 
 class SDL_Cannot_Load_Media: public myexception {
-    SDL_Cannot_Load_Media(char* file, std::string msg):
-    myexception(
-                "SDL Cannot Load Media",
-                std::format("{} : {}", std::string{file}, msg)
-    ) {};
-    SDL_Cannot_Load_Media(char* file, char* msg):
-    myexception(
-                "SDL Cannot Load Media",
-                std::format("{} : {}", std::string{file},std::string{msg})
-    ) {};
+public:
+    SDL_Cannot_Load_Media(std::string file, std::string msg):
+    myexception("SDL Cammpt Load Media",
+                std::format("{} : {}", file, msg)
+                ) {}
 };
 
 #endif
