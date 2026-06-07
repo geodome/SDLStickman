@@ -26,4 +26,17 @@ void Animation::register_handler(uint32_t event_type, std::function<void(SDL_Eve
     handlers[event_type].push_back(f);
 }
 
+void Animation::handle_events(bool& quit, bool& suspended) {
+    SDL_Event e;
+    while(SDL_PollEvent(&e)) {
+        for(auto f: handlers[e.type]){
+            f(e, quit, suspended);
+            if(quit) break;
+        }
+        if(quit) break;
+    }
+}
+
+
+
 #endif
