@@ -38,6 +38,12 @@ Animation::Animation() {
     }
 }
 
+Animation::~Animation() {
+    if(gSurface != nullptr) SDL_FreeSurface(gSurface);
+    if(gWindow != nullptr)  SDL_DestroyWindow(gWindow);
+    SDL_Quit();
+}
+
 void Animation::register_handler(uint32_t event_type, std::function<void(SDL_Event, bool&, bool&)> f) {
     handlers[event_type].push_back(f);
 }
