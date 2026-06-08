@@ -17,8 +17,8 @@ Stickman::Stickman(int x, int y, int delay_ticks):GameObject() {
     }
     // toggles the animation on/off with a mouse click
     add_handler(SDL_MOUSEBUTTONDOWN, [x,y, this] (SDL_Event e, bool& quit, bool& suspended) {
-        auto dx = e.motion.x - x;
-        auto dy = e.motion.y - y;
+        auto dx = e.button.x - x;
+        auto dy = e.button.y - y;
         if(dx > 0 && dx < WIDTH && dy > 0 && dy < HEIGHT) this->toggle_animation();
     });
     destination.x = x;
