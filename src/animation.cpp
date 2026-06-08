@@ -7,7 +7,7 @@
 #include "gameobject.h"
 #include "animation.h"
 
-Animation::Animation() {
+Animation::Animation(): WIDTH{2*Stickman::WIDTH}, HEIGHT{2*Stickman::HEIGHT} {
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw SDL_Cannot_Init(SDL_GetError());
     }
@@ -26,6 +26,9 @@ Animation::Animation() {
     
     add_game_object(new Stickman(0,0,1));
     add_game_object(new Stickman(Stickman::WIDTH,0,2));
+    add_game_object(new Stickman(0,Stickman::HEIGHT,3));
+    add_game_object(new Stickman(Stickman::WIDTH,Stickman::HEIGHT, 4));
+
 }
 
 Animation::~Animation() {
