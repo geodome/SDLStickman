@@ -8,7 +8,7 @@
 #include "exceptions.h"
 #include "gameobject.h"
 
-Stickman::Stickman(int x, int y, size_t delay_ticks):GameObject() {
+Stickman::Stickman(int x, int y, uint32_t delay_ticks):GameObject() {
     std::string file {"/Users/donaldsontan/projects/SDLStickman/SDLStickman/assets/stickman.bmp"};
     bmp = SDL_LoadBMP(file.c_str());
     if(bmp == nullptr) {
@@ -44,7 +44,7 @@ void Stickman::next_frame() {
     source.y = y*HEIGHT;
 }
 
-void Stickman::draw(SDL_Surface* gSurface) {
+void Stickman::update(SDL_Surface* gSurface) {
     if(!suspended && to_update()) {
         next_frame();
         SDL_BlitSurface(bmp, &source, gSurface, &destination);

@@ -23,7 +23,7 @@ public:
     void register_handler(uint32_t, std::function<void(SDL_Event, bool&, bool&)>);
     void handle_events(bool&, bool&);
     void tick();
-    void draw();
+    void update();
     void render();
     void add_game_object(GameObject*);
 };

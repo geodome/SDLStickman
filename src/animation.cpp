@@ -64,7 +64,7 @@ void Animation::main_loop() {
     while(!quit) {
         handle_events(quit, suspended);
         if(!suspended) {
-            draw();
+            update();
             render();
             tick();
             SDL_Delay(DELAY);
@@ -87,9 +87,9 @@ void Animation::tick() {
     }
 }
 
-void Animation::draw() {
+void Animation::update() {
     for(auto obj: gObjects) {
-        obj->draw(gSurface);
+        obj->update(gSurface);
     }
 }
 
