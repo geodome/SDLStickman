@@ -64,8 +64,8 @@ void Animation::main_loop() {
             draw();
             render();
             tick();
+            SDL_Delay(DELAY);
         }
-        SDL_Delay(DELAY);
     }
 }
 
