@@ -9,12 +9,6 @@
 #include "gameobject.h"
 
 Stickman::Stickman(int x, int y, uint32_t delay_ticks):GameObject() {
-    std::string file {"/Users/donaldsontan/projects/SDLStickman/SDLStickman/assets/stickman.bmp"};
-    bmp = SDL_LoadBMP(file.c_str());
-    if(bmp == nullptr) {
-        auto msg = std::string{SDL_GetError()};
-        throw SDL_Cannot_Load_Media(file, msg);
-    }
     // toggles the animation on/off with a mouse click
     add_handler(SDL_MOUSEBUTTONDOWN, [x,y, this] (SDL_Event e, bool& quit, bool& suspended) {
         auto dx = e.button.x - x;
@@ -27,7 +21,7 @@ Stickman::Stickman(int x, int y, uint32_t delay_ticks):GameObject() {
 }
 
 Stickman::~Stickman() {
-    SDL_FreeSurface(bmp);
+    SDL_DestroyTexture(bmp_texture);
 }
 
 void Stickman::reset_frame() {
@@ -44,13 +38,28 @@ void Stickman::next_frame() {
     source.y = y*HEIGHT;
 }
 
-void Stickman::update(SDL_Surface* gSurface) {
+void Stickman::update() {
     if(!suspended && to_update()) {
         next_frame();
-        SDL_BlitSurface(bmp, &source, gSurface, &destination);
     }
+}
+
+void Stickman::render(SDL_Renderer* gRenderer) {
+    if(bmp_texture == nullptr) load_media(gRenderer);
+    SDL_RenderCopy(gRenderer, bmp_texture, &source, &destination);
 }
 
 void Stickman::toggle_animation() {
     suspended = !suspended;
+}
+
+void Stickman::load_media(SDL_Renderer* gRenderer) {
+    std::string file {"/Users/donaldsontan/projects/SDLStickman/SDLStickman/assets/stickman.bmp"};
+    SDL_Surface* bmp_surface = SDL_LoadBMP(file.c_str());
+    if(bmp_surface == nullptr) {
+        auto msg = std::string{SDL_GetError()};
+        throw SDL_Cannot_Load_Media(file, msg);
+    }
+    bmp_texture = SDL_CreateTextureFromSurface(gRenderer, bmp_surface);
+    SDL_FreeSurface(bmp_surface);
 }

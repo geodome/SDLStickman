@@ -12,7 +12,7 @@
 class Animation {
     int WIDTH, HEIGHT;
     SDL_Window* gWindow;
-    SDL_Surface* gSurface;
+    SDL_Renderer* gRenderer;
     std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&,bool&)>>> handlers{};
     std::vector<GameObject*> gObjects;
 public:

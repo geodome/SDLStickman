@@ -17,8 +17,8 @@ Animation::Animation(): WIDTH{2*Stickman::WIDTH}, HEIGHT{2*Stickman::HEIGHT} {
         throw SDL_Cannot_Init(SDL_GetError());
     }
     
-    gSurface = SDL_GetWindowSurface(gWindow);
-    if(gSurface == nullptr) {
+    gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if(gRenderer == nullptr) {
         SDL_DestroyWindow(gWindow);
         SDL_Quit();
         throw SDL_Cannot_Init(SDL_GetError());
@@ -35,7 +35,7 @@ Animation::~Animation() {
     for(auto ptr: gObjects) {
         delete ptr;
     }
-    SDL_FreeSurface(gSurface);
+    SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
     SDL_Quit();
 }
@@ -89,10 +89,14 @@ void Animation::tick() {
 
 void Animation::update() {
     for(auto obj: gObjects) {
-        obj->update(gSurface);
+        obj->update();
     }
 }
 
 void Animation::render() {
-    SDL_UpdateWindowSurface(gWindow);
+    SDL_RenderClear(gRenderer);
+    for(auto obj: gObjects) {
+        obj->render(gRenderer);
+    }
+    SDL_RenderPresent(gRenderer);
 }

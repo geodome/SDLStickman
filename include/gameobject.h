@@ -18,14 +18,15 @@ public:
     void reset_ticker();
     bool to_update();
     virtual ~GameObject() = default;
-    virtual void update(SDL_Surface*) {};
+    virtual void update() {};
+    virtual void render(SDL_Renderer*) {};
     void add_handler(uint32_t, std::function<void(SDL_Event,bool&, bool&)>);
     const std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&, bool&)>>> get_handlers();
 };
 
 class Stickman: public GameObject {
     uint32_t i{0};
-    SDL_Surface* bmp;
+    SDL_Texture* bmp_texture;
     SDL_Rect source{0,0,WIDTH,HEIGHT}, destination{0,0,WIDTH,HEIGHT};
     bool suspended{false};
 public:
@@ -34,8 +35,10 @@ public:
     ~Stickman();
     void reset_frame();
     void next_frame();
-    void update(SDL_Surface* gSurface) override;
+    void update() override;
+    void render(SDL_Renderer*) override;
     void toggle_animation();
+    void load_media(SDL_Renderer*);
 };
 
 #endif
