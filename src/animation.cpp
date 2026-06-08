@@ -63,6 +63,7 @@ void Animation::main_loop() {
         if(!suspended) {
             draw();
             render();
+            tick();
             SDL_Delay(DELAY);
         }
     }
@@ -74,6 +75,12 @@ void Animation::add_game_object(GameObject* g) {
         for(auto f: handlers) {
             register_handler(event_type, f);
         }
+    }
+}
+
+void Animation::tick() {
+    for(auto obj:gObjects) {
+        obj->tick();
     }
 }
 

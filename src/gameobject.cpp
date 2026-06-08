@@ -4,6 +4,18 @@
 #include <SDL2/SDL.h>
 #include "gameobject.h"
 
+void GameObject::tick() {
+    ticker = (ticker + 1) % delay;
+}
+
+void GameObject::reset_ticker() {
+    ticker = 0;
+}
+
+bool GameObject::to_update() {
+    return ticker == 0;
+}
+
 const std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&, bool&)>>> GameObject::get_handlers() {
     return handlers;
 }
