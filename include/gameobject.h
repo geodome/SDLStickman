@@ -20,7 +20,7 @@ public:
 };
 
 class Stickman: public GameObject {
-    int i{-1}, ticks{0}, delay;
+    int i{-1}, ticks{-1}, delay;
     SDL_Surface* bmp;
     SDL_Rect source{0,0,WIDTH,HEIGHT}, destination{0,0,WIDTH,HEIGHT};
     bool suspended{false};

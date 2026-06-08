@@ -28,6 +28,7 @@ Stickman::~Stickman() {
 
 void Stickman::reset_frame() {
     i = -1;
+    ticks = -1;
     source = {0, 0, WIDTH, HEIGHT};
 }
 
