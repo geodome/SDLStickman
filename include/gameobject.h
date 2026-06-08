@@ -15,7 +15,7 @@ public:
     virtual ~GameObject() = default;
     virtual void draw(SDL_Surface*) {};
     void add_handler(uint32_t, std::function<void(SDL_Event,bool&, bool&)>);
-    std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&, bool&)>>> get_handlers();
+    const std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&, bool&)>>> get_handlers();
 };
 
 class Stickman: public GameObject {

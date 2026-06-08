@@ -20,7 +20,7 @@ Stickman::Stickman():GameObject() {
         suspended = !suspended;
         auto x = std::to_string(e.motion.x);
         auto y = std::to_string(e.motion.y);
-        std::cout << "mouse button down at (" << x << ", " << y << ")" << std::endl;
+        std::cout << std::format("mouse button down at {},{}", x.data(), y.data()) << std::endl;
     });
 }
 
