@@ -46,10 +46,12 @@ void Stickman::next_frame() {
 }
 
 void Stickman::draw(SDL_Surface* gSurface) {
-    ticks = (ticks + 1) % delay;
-    if(ticks == 0) {
-        next_frame();
-        SDL_BlitSurface(bmp, &source, gSurface, &destination);
+    if(!suspended) {
+        ticks = (ticks + 1) % delay;
+        if(ticks == 0) {
+            next_frame();
+            SDL_BlitSurface(bmp, &source, gSurface, &destination);
+        }
     }
 }
 
