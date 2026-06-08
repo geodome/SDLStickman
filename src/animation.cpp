@@ -62,7 +62,7 @@ void Animation::main_loop() {
         if(!suspended) {
             draw();
             render();
-            SDL_Delay(100);
+            SDL_Delay(DELAY);
         }
     }
 }
