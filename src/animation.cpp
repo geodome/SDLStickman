@@ -63,7 +63,8 @@ void Animation::main_loop() {
             draw();
             render();
             SDL_Delay(100);
-        }    }
+        }
+    }
 }
 
 void Animation::add_game_object(GameObject* g) {
