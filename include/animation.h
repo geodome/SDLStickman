@@ -10,12 +10,13 @@
 #include "gameobject.h"
 
 class Animation {
-    const int DELAY{100}, WIDTH{400}, HEIGHT{366};
     SDL_Window* gWindow;
     SDL_Surface* gSurface;
     std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&,bool&)>>> handlers{};
     std::vector<GameObject*> gObjects;
 public:
+    static const int DELAY{50};
+    static const int WIDTH{2*Stickman::WIDTH},HEIGHT{Stickman::HEIGHT};
     Animation();
     ~Animation();
     void main_loop();

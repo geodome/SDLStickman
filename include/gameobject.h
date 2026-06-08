@@ -14,23 +14,27 @@ public:
     GameObject() = default;
     virtual ~GameObject() = default;
     virtual void draw(SDL_Surface*) {};
+    virtual void tick() {};
     void add_handler(uint32_t, std::function<void(SDL_Event,bool&, bool&)>);
     const std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&, bool&)>>> get_handlers();
 };
 
 class Stickman: public GameObject {
-    const int WIDTH{400}, HEIGHT{366};
-    int i{-1};
+    int i{-1}, ticks{0}, delay;
     SDL_Surface* bmp;
     SDL_Rect source{0,0,WIDTH,HEIGHT}, destination{0,0,WIDTH,HEIGHT};
+    bool suspended{false};
 public:
-    Stickman();
+    static const int WIDTH{400}, HEIGHT{366};
+    Stickman(int x, int y, int delay_ticks);
     ~Stickman();
     void reset_frame();
     void next_frame();
     void draw(SDL_Surface* gSurface) override;
+    void toggle_animation();
 };
 
 #endif
+
 
 

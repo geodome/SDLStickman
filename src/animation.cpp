@@ -24,7 +24,8 @@ Animation::Animation() {
         throw SDL_Cannot_Init(SDL_GetError());
     }
     
-    add_game_object(new Stickman());
+    add_game_object(new Stickman(0,0,1));
+    add_game_object(new Stickman(Stickman::WIDTH,0,2));
 }
 
 Animation::~Animation() {
@@ -63,8 +64,7 @@ void Animation::main_loop() {
             draw();
             render();
             SDL_Delay(DELAY);
-        }
-    }
+        }    }
 }
 
 void Animation::add_game_object(GameObject* g) {

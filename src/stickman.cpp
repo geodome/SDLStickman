@@ -8,7 +8,7 @@
 #include "exceptions.h"
 #include "gameobject.h"
 
-Stickman::Stickman():GameObject() {
+Stickman::Stickman(int x, int y, int delay_ticks):GameObject() {
     std::string file {"/Users/donaldsontan/projects/SDLStickman/SDLStickman/assets/stickman.bmp"};
     bmp = SDL_LoadBMP(file.c_str());
     if(bmp == nullptr) {
@@ -16,12 +16,10 @@ Stickman::Stickman():GameObject() {
         throw SDL_Cannot_Load_Media(file, msg);
     }
     // toggles the animation on/off with a mouse click
-    add_handler(SDL_MOUSEBUTTONDOWN, [] (SDL_Event e, bool& quit, bool& suspended) {
-        suspended = !suspended;
-        auto x = std::to_string(e.motion.x);
-        auto y = std::to_string(e.motion.y);
-        std::cout << std::format("mouse button down at {},{}", x.data(), y.data()) << std::endl;
-    });
+    //add_handler(SDL_MOUSEBUTTONDOWN, this->toggle_animation);
+    destination.x = x;
+    destination.y = y;
+    delay = delay_ticks;
 }
 
 Stickman::~Stickman() {
@@ -34,16 +32,21 @@ void Stickman::reset_frame() {
 }
 
 void Stickman::next_frame() {
-    i = (i + 1) % 8;
-    int x = i % 4;
-    int y = i / 4;
-    source.x = x*WIDTH;
-    source.y = y*HEIGHT;
+    if (!suspended) {
+        i = (i + 1) % 8;
+        int x = i % 4;
+        int y = i / 4;
+        source.x = x*WIDTH;
+        source.y = y*HEIGHT;
+    }
 }
 
 void Stickman::draw(SDL_Surface* gSurface) {
-    next_frame();
+    ticks = (ticks + 1) % delay;
+    if(ticks == 0) next_frame();
     SDL_BlitSurface(bmp, &source, gSurface, &destination);
 }
 
-
+void Stickman::toggle_animation() {
+    suspended = !suspended;
+}
