@@ -31,11 +31,11 @@ void Stickman::reset_frame() {
 }
 
 void Stickman::next_frame() {
-    i = (i + 1) % 8;
     int x = i % 4;
     int y = i / 4;
     source.x = x*WIDTH;
     source.y = y*HEIGHT;
+    i = (i + 1) % 8;
 }
 
 void Stickman::update() {
