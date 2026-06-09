@@ -4,6 +4,8 @@
 #include <SDL2/SDL.h>
 #include "gameobject.h"
 
+GameObject::GameObject(uint32_t delay_ticks): delay{delay_ticks} {}
+
 void GameObject::tick() {
     ticker = (ticker + 1) % delay;
 }

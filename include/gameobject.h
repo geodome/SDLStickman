@@ -11,9 +11,9 @@
 class GameObject {
     std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&, bool&)>>> handlers{};
 protected:
-    uint32_t ticker{0}, delay{1};
+    uint32_t ticker{0}, delay;
 public:
-    GameObject() = default;
+    GameObject(uint32_t delay_ticks=1);
     void tick();
     void reset_ticker();
     bool to_update();

@@ -3,7 +3,7 @@
 #include "exceptions.h"
 #include "gameobject.h"
 
-Stickman::Stickman(int x, int y, uint32_t delay_ticks):GameObject() {
+Stickman::Stickman(int x, int y, uint32_t delay_ticks):GameObject(delay_ticks) {
     // toggles the animation on/off with a mouse click
     add_handler(SDL_MOUSEBUTTONDOWN, [x,y, this] (SDL_Event e, bool& quit, bool& suspended) {
         auto dx = e.button.x - x;
