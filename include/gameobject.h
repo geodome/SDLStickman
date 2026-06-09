@@ -4,7 +4,6 @@
 #include <map>
 #include <vector>
 #include <functional>
-#include <string>
 #include <SDL2/SDL.h>
 #include "exceptions.h"
 
