@@ -1,9 +1,4 @@
-#include <map>
-#include <vector>
-#include <functional>
 #include <string>
-#include <iostream>
-#include <format>
 #include <SDL2/SDL.h>
 #include "exceptions.h"
 #include "gameobject.h"

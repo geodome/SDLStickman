@@ -1,11 +1,8 @@
-#include <map>
-#include <functional>
-#include <vector>
-#include <format>
 #include <SDL2/SDL.h>
 #include "exceptions.h"
 #include "gameobject.h"
 #include "animation.h"
+
 
 Animation::Animation(): WIDTH{2*Stickman::WIDTH}, HEIGHT{2*Stickman::HEIGHT} {
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
