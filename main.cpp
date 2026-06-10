@@ -1,10 +1,10 @@
-#include "animation.h"
+#include "system.h"
 #include "exceptions.h"
 #include <iostream>
 
 int main(int argc, char* argv[]) {
     try {
-        Animation anime{};
+        System anime{};
         anime.main_loop();
     } catch(SDL_Cannot_Init& e) {
         std::cerr << e.what() << std::endl;
