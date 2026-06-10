@@ -1,4 +1,5 @@
-# SDLStickman
+# SDLStickman v0.1.0
+
 Simple Stickman Animation using SDL2
 
 4 individual stickman walking at different speeds. Each stickman can be individually suspended by clicking it.
@@ -27,3 +28,4 @@ To enhance granular control of each Game Object, the interface of Game Object  w
 - Position sub-interface for controlling movement, velocity and acceleration.
 - Animation sub-interface for controlling apperance and other animation related effects.
 - Input Handler to handle input events
+git 
