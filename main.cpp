@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) {
     try {
-        System anime{};
+        System::System anime{};
         anime.main_loop();
     } catch(SDL_Cannot_Init& e) {
         std::cerr << e.what() << std::endl;
