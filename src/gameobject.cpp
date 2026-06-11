@@ -26,4 +26,3 @@ void GameObject::add_handler(uint32_t event_type, std::function<void(SDL_Event,b
     handlers[event_type].push_back(f);
 }
 
-
