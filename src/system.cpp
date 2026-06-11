@@ -4,6 +4,9 @@
 #include "stickman.h"
 #include "system.h"
 
+using namespace Character;
+
+namespace System {
 System::System(): WIDTH{2*Stickman::WIDTH}, HEIGHT{2*Stickman::HEIGHT} {
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw SDL_Cannot_Init(SDL_GetError());
@@ -22,10 +25,10 @@ System::System(): WIDTH{2*Stickman::WIDTH}, HEIGHT{2*Stickman::HEIGHT} {
     }
     
     add_game_object(new Stickman(0,0,1));
-    add_game_object(new Stickman(Stickman::WIDTH,0,2));
-    add_game_object(new Stickman(0,Stickman::HEIGHT,3));
-    add_game_object(new Stickman(Stickman::WIDTH,Stickman::HEIGHT, 4));
-
+    add_game_object(new Stickman(Character::Stickman::WIDTH,0,2));
+    add_game_object(new Character::Stickman(0,Stickman::HEIGHT,3));
+    add_game_object(new Character::Stickman(Stickman::WIDTH,Stickman::HEIGHT, 4));
+    
 }
 
 System::~System() {
@@ -96,4 +99,5 @@ void System::render() {
         obj->render(gRenderer);
     }
     SDL_RenderPresent(gRenderer);
+}
 }

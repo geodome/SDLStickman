@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 
+namespace System {
 Vector2D Vector2D::operator+(Vector2D other) {
     return {x + other.x, y + other.y};
 }
@@ -51,3 +52,4 @@ std::ostream& operator<<(std::ostream& out, const Vector2D& other) {
 }
 
 
+}

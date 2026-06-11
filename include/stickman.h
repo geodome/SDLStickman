@@ -4,7 +4,9 @@
 #include <SDL2/SDL.h>
 #include "gameobject.h"
 
-class Stickman: public GameObject {
+namespace Character {
+
+class Stickman: public System::GameObject {
     uint32_t i{0};
     SDL_Texture* bmp_texture;
     SDL_Rect source{0,0,WIDTH,HEIGHT}, destination{0,0,WIDTH,HEIGHT};
@@ -21,4 +23,5 @@ public:
     void load_media(SDL_Renderer*);
 };
 
+}
 #endif

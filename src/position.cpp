@@ -1,6 +1,7 @@
 #include "vector2d.h"
 #include "position.h"
 
+namespace System {
 Vector2D Position::get_coord() {
     return coord;
 }
@@ -42,3 +43,4 @@ void Position::stop() {
     acceleration = {0,0};
 }
 
+}

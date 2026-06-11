@@ -9,6 +9,7 @@
 #include "exceptions.h"
 #include "gameobject.h"
 
+namespace System {
 class System {
     int WIDTH, HEIGHT;
     SDL_Window* gWindow;
@@ -27,5 +28,5 @@ public:
     void render();
     void add_game_object(GameObject*);
 };
-
+}
 #endif

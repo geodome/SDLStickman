@@ -4,6 +4,8 @@
 #include <SDL2/SDL.h>
 #include "gameobject.h"
 
+namespace System {
+
 GameObject::GameObject(uint32_t delay_ticks): delay{delay_ticks} {}
 
 void GameObject::tick() {
@@ -26,3 +28,4 @@ void GameObject::add_handler(uint32_t event_type, std::function<void(SDL_Event,b
     handlers[event_type].push_back(f);
 }
 
+}

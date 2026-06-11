@@ -4,6 +4,8 @@
 #include <iostream>
 #include <stdexcept>
 
+namespace System {
+
 struct Vector2D {
     double x, y;
     Vector2D operator+(Vector2D other);
@@ -18,5 +20,6 @@ struct Vector2D {
 
 std::ostream& operator<<(std::ostream& out, const Vector2D& other);
 
+}
 #endif
 

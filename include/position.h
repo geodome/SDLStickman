@@ -3,6 +3,8 @@
 
 #include "vector2d.h"
 
+namespace System {
+
 class Position {
     Vector2D coord{0,0}, velocity{0,0}, acceleration{0,0};
 public:
@@ -18,6 +20,8 @@ public:
     void set_velocity(double, double);
     void set_acceleration(double, double);
 };
+
+}
 
 #endif
 
