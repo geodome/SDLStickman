@@ -1,4 +1,3 @@
-
 #ifndef VECTOR2D_H
 #define VECTOR2D_H
 
@@ -7,18 +6,18 @@
 
 struct Vector2D {
     double x, y;
-    Vector2D operator+(Vector2D& other) {
+    Vector2D operator+(Vector2D other) {
         return {x + other.x, y + other.y};
     }
-    Vector2D& operator+=(Vector2D& other) {
+    Vector2D& operator+=(Vector2D other) {
         x += other.x;
         y += other.y;
         return *this;
     }
-    Vector2D operator-(Vector2D& other) {
+    Vector2D operator-(Vector2D other) {
         return {x - other.x, y - other.y};
     }
-    Vector2D& operator-=(Vector2D& other) {
+    Vector2D& operator-=(Vector2D other) {
         x -= other.x;
         y -= other.y;
         return *this;
@@ -43,7 +42,7 @@ struct Vector2D {
     }
 };
 
-Vector2D operator*(double a, Vector2D& other) {
+Vector2D operator*(double a, Vector2D other) {
     return other*a;
 }
 
@@ -51,6 +50,5 @@ std::ostream& operator<<(std::ostream& out, const Vector2D& other) {
     out << "(" << other.x << "," << other.y << ")";
     return out;
 }
-
 #endif
 
