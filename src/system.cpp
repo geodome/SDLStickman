@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include "exceptions.h"
 #include "gameobject.h"
+#include "stickman.h"
 #include "system.h"
 
 System::System(): WIDTH{2*Stickman::WIDTH}, HEIGHT{2*Stickman::HEIGHT} {

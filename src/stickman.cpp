@@ -1,6 +1,7 @@
 #include <string>
 #include <SDL2/SDL.h>
 #include "exceptions.h"
+#include "stickman.h"
 #include "gameobject.h"
 
 Stickman::Stickman(int x, int y, uint32_t delay_ticks):GameObject(delay_ticks) {
