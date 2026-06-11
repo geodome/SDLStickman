@@ -23,9 +23,4 @@ public:
     void add_handler(uint32_t, std::function<void(SDL_Event,bool&, bool&)>);
     const std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&, bool&)>>> get_handlers();
 };
-
-
 #endif
-
-
-
