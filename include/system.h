@@ -9,33 +9,32 @@
 #include "exceptions.h"
 #include "gameobject.h"
 
-using GameObject = GameObjects::GameObject;
-
 namespace System {
-class System {
+
+class Game {
     int WIDTH, HEIGHT;
     SDL_Window* gWindow;
     SDL_Renderer* gRenderer;
     std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&,bool&)>>> handlers{};
-    std::vector<GameObject*> gObjects;
-    static System* instance;
-    System();
-    friend System* Singleton();
+    std::vector<GameObjects::GameObject*> gObjects;
+    static Game* instance;
+    Game();
+    friend Game* Singleton();
     friend void Destroy_Singleton();
 public:
-    static const int DELAY{50};
-    ~System();
+    static const int DELAY;
+    ~Game();
     void main_loop();
     void register_handler(uint32_t, std::function<void(SDL_Event, bool&, bool&)>);
     void handle_events(bool&, bool&);
     void tick();
     void update();
     void render();
-    void add_game_object(GameObject*);
+    void add_game_object(GameObjects::GameObject*);
 };
 
-System* System::instance = nullptr;
-System* Singleton();;
+Game* Singleton();;
 void Destroy_Singleton();
+
 }
 #endif

@@ -8,18 +8,21 @@ using Stickman = GameObjects::Characters::Stickman;
 
 namespace System {
 
-System* Singleton() {
-    if(System::instance == nullptr) System::instance = new System();
-    return System::instance;
+const int Game::DELAY = 50;
+Game* Game::instance = nullptr;
+
+Game* Singleton() {
+    if(Game::instance == nullptr) Game::instance = new Game();
+    return Game::instance;
 }
 
 void Destroy_Singleton() {
-    if(System::instance == nullptr) return;
-    delete System::instance;
-    System::instance = nullptr;
+    if(Game::instance == nullptr) return;
+    delete Game::instance;
+    Game::instance = nullptr;
 }
 
-System::System(): WIDTH{2*Stickman::WIDTH}, HEIGHT{2*Stickman::HEIGHT} {
+Game::Game(): WIDTH{2*Stickman::WIDTH}, HEIGHT{2*Stickman::HEIGHT} {
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw SDL_Cannot_Init(SDL_GetError());
     }
@@ -43,7 +46,7 @@ System::System(): WIDTH{2*Stickman::WIDTH}, HEIGHT{2*Stickman::HEIGHT} {
     
 }
 
-System::~System() {
+Game::~Game() {
     for(auto ptr: gObjects) {
         delete ptr;
     }
@@ -52,11 +55,11 @@ System::~System() {
     SDL_Quit();
 }
 
-void System::register_handler(uint32_t event_type, std::function<void(SDL_Event, bool&, bool&)> f) {
+void Game::register_handler(uint32_t event_type, std::function<void(SDL_Event, bool&, bool&)> f) {
     handlers[event_type].push_back(f);
 }
 
-void System::handle_events(bool& quit, bool& suspended) {
+void Game::handle_events(bool& quit, bool& suspended) {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
         for(auto f: handlers[e.type]){
@@ -67,7 +70,7 @@ void System::handle_events(bool& quit, bool& suspended) {
     }
 }
 
-void System::main_loop() {
+void Game::main_loop() {
     bool quit{false}, suspended{false};
     register_handler(SDL_QUIT, [] (SDL_Event e, bool& quit, bool& suspended) {
         quit = true;
@@ -84,7 +87,7 @@ void System::main_loop() {
     }
 }
 
-void System::add_game_object(GameObject* g) {
+void Game::add_game_object(GameObjects::GameObject* g) {
     gObjects.push_back(g);
     for(auto& [event_type, handlers]: g->get_handlers()) {
         for(auto f: handlers) {
@@ -93,19 +96,19 @@ void System::add_game_object(GameObject* g) {
     }
 }
 
-void System::tick() {
+void Game::tick() {
     for(auto obj:gObjects) {
         obj->tick();
     }
 }
 
-void System::update() {
+void Game::update() {
     for(auto obj: gObjects) {
         obj->update();
     }
 }
 
-void System::render() {
+void Game::render() {
     SDL_RenderClear(gRenderer);
     for(auto obj: gObjects) {
         obj->render(gRenderer);

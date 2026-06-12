@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace System {
+namespace GameObjects {
 
 struct Vector2D {
     double x, y;
@@ -22,4 +22,5 @@ std::ostream& operator<<(std::ostream& out, const Vector2D& other);
 
 }
 #endif
+
 

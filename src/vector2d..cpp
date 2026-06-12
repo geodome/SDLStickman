@@ -2,7 +2,8 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace System {
+namespace GameObjects {
+
 Vector2D Vector2D::operator+(Vector2D other) {
     return {x + other.x, y + other.y};
 }

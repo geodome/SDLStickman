@@ -52,7 +52,7 @@ void Stickman::toggle_animation() {
 }
 
 void Stickman::load_media(SDL_Renderer* gRenderer) {
-    std::string file {"/Users/donaldsontan/projects/SDLStickman/SDLStickman/assets/stickman.bmp"};
+    std::string file {"/Users/donaldsontan/projects/mtd215/mtd215/assets/stickman.bmp"};
     SDL_Surface* bmp_surface = SDL_LoadBMP(file.c_str());
     if(bmp_surface == nullptr) {
         auto msg = std::string{SDL_GetError()};
