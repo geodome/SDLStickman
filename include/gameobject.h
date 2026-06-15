@@ -1,33 +1,39 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include <map>
-#include <vector>
-#include <functional>
-#include <SDL2/SDL.h>
-#include "exceptions.h"
-
-namespace GameObjects {
+#include <stdexcept>
+#include "position.h"
+#include "animation.h"
+#include "controller.h"
 
 class GameObject {
-    std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&, bool&)>>> handlers{};
-    
-protected:
-    uint32_t ticker{0}, delay;
+    Position* pos;
+    Animation* anime;
+    Controller* ctrl;
 public:
-    GameObject(uint32_t delay_ticks=1);
-    void tick();
-    void reset_ticker();
-    bool to_update();
-    virtual ~GameObject() = default;
-    virtual void update() {};
-    virtual void render(SDL_Renderer*) {};
-    void add_handler(uint32_t, std::function<void(SDL_Event,bool&, bool&)>);
-    const std::map<uint32_t, std::vector<std::function<void(SDL_Event,bool&, bool&)>>> get_handlers();
+    GameObject(double x, double y, double w, double h) {
+        pos = new Position(x,y,w,h);
+    }
+    GameObject(Position* p, Animation* a, Controller * c): pos{p}, anime{a}, ctrl{c} {}
+    virtual ~GameObject() {
+        delete position();
+    }
+    void set_animation(Animation* a) {
+        anime = a;
+    }
+    Animation* animation() {
+        if(anime == nullptr) throw std::runtime_error{"no animation object was defined for this game object"};
+        return anime;
+    }
+    Position* position() {
+        return pos;
+    }
+    void set_controller(Controller* c) {
+        ctrl = c;
+    }
+    Controller* controller() {
+        if(ctrl == nullptr) throw std::runtime_error("no controller object was defined for this game object");
+        return ctrl;
+    }
 };
-
-}
 #endif
-
-
-

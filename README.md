@@ -1,4 +1,25 @@
-# SDLStickman v0.1.0
+# SDLStickman v0.2.0
+
+Simple Stickman Animation using SDL2
+
+A stickman running across the Window. 
+
+His movement can be paused by pressing the space bar and his direction is set by the  W,A,S,D keys.
+
+### Overall Design
+
+The overall design is based on an Animation system that interacts with each Game Object, whereby each Stickman is a Game Object.
+
+The interface of a GameObject is segregated into 3 interfaces
+- Position which determines the coordinate, velocity and acceleration of the GameObject in 2D space.
+- Animation which determines the state of animation.
+- Controller which defines the input handlers.
+
+### Next Phase
+
+The nexxt phase will explore tiled maps, placement and interaction between various game objects. e.g. collision.
+
+## SDLStickman v0.1.0
 
 Simple Stickman Animation using SDL2
 
@@ -28,4 +49,4 @@ To enhance granular control of each Game Object, the interface of Game Object  w
 - Position sub-interface for controlling movement, velocity and acceleration.
 - Animation sub-interface for controlling apperance and other animation related effects.
 - Input Handler to handle input events
-git 
+

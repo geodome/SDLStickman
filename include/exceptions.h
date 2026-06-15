@@ -19,7 +19,6 @@ public:
     }
 };
 
-namespace System {
 class SDL_Cannot_Init: public myexception {
 public:
     SDL_Cannot_Init(std::string msg):
@@ -27,9 +26,7 @@ public:
     SDL_Cannot_Init(char* msg):
     myexception("SDL Cannot Init", msg) {};
 };
-}
 
-namespace GameObjects {
 class SDL_Cannot_Load_Media: public myexception {
 public:
     SDL_Cannot_Load_Media(std::string file, std::string msg):
@@ -37,5 +34,5 @@ public:
                 std::format("{} : {}", file, msg)
                 ) {}
 };
-}
+
 #endif
