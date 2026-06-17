@@ -6,11 +6,11 @@
 #include "position.h"
 
 class Animation {
-    uint32_t ticker, delay;
+    uint32_t ticker, delay{1};
     bool suspended{false}, flip{false};
-    Position* pos{nullptr};
+    Position* pos;
 public:
-    Animation(uint32_t d, Position* p): delay{d}, pos{p} {}
+    Animation(Position* p): pos{p} {}
     virtual ~Animation() {}
     virtual void load_media(SDL_Renderer* gRenderer) {}
     virtual void render(SDL_Renderer* gRenderer) {}
@@ -23,6 +23,9 @@ public:
     }
     bool to_update() {
         return ticker == 0;
+    }
+    void set_delay(uint32_t d) {
+        delay = d;
     }
     void set_position(Position* p) {
         pos = p;

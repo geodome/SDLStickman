@@ -10,13 +10,12 @@
 #include "position.h"
 
 class System {
-    static System* instance;
-    static const int DELAY;
+    static const int PERIOD;
     SDL_Window* gWindow;
     SDL_Renderer* gRenderer;
     std::vector<GameObject*> game_objects{};
     int WIDTH, HEIGHT;
-    
+public:
     System(int w, int h): WIDTH{w}, HEIGHT{h} {
         if(SDL_Init(SDL_INIT_VIDEO) < 0) {
             throw SDL_Cannot_Init(SDL_GetError());
@@ -35,21 +34,7 @@ class System {
         }
         
     }
-public:
-    static System* Singleton(int width, int height) {
-        if(System::instance == nullptr) System::instance = new System(width,height);
-        return System::instance;
-    }
-    static void Destroy_Singleton() {
-        if(System::instance == nullptr) return;
-        delete System::instance;
-    }
     ~System() {
-        while(game_objects.size() > 0) {
-            auto ptr = game_objects.back();
-            delete ptr;
-            game_objects.pop_back();
-        }
         SDL_DestroyRenderer(gRenderer);
         SDL_DestroyWindow(gWindow);
         SDL_Quit();
@@ -100,17 +85,17 @@ public:
             update();
             render();
             tick();
-            SDL_Delay(DELAY);
+            SDL_Delay(PERIOD);
         }
     }
     void start_demo() {
-        add_game_object(new Stickman(20,20));
+        auto s = Stickman(20,20,2);
+        add_game_object(&s);
         main_loop();
     }
 };
 
-const int System::DELAY = 30;
-System* System::instance = nullptr;
+const int System::PERIOD = 30;
 
 
 #endif

@@ -4,14 +4,13 @@
 
 int main(int argc, char* argv[]) {
     try {
-        System::Singleton(1200,600)->start_demo();
-        System::Destroy_Singleton();
+        auto s = System(1200,600);
+        s.start_demo();
     } catch(SDL_Cannot_Init& e) {
         std::cerr << e.what() << std::endl;
         return 1;
     } catch(SDL_Cannot_Load_Media& e) {
         std::cerr << e.what() << std::endl;
-        SDL_Quit();
         return 1;
     }
     return 0;

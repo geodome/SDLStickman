@@ -12,14 +12,24 @@
 
 class StickmanAnimation: public Animation {
     Position* pos;
-    SDL_Rect source{0,0,WIDTH,HEIGHT}, destination{0,0,WIDTH,HEIGHT};
-    SDL_Texture* bmp_texture;
-    static const int WIDTH, HEIGHT, DELAY;
+    SDL_Rect source, destination;
+    SDL_Texture* bmp_texture = nullptr;
+    double width, height;
     int i{0};
 public:
-    StickmanAnimation(Position* p): Animation(DELAY, p) {}
+    StickmanAnimation(Position* p): Animation{p} {
+        width = p->get_width() - 2;
+        height = p->get_height() - 2;
+        source.w = width;
+        source.h = height;
+        destination.w = width;
+        destination.h = height;
+    }
     ~StickmanAnimation() {
         if(bmp_texture != nullptr) SDL_DestroyTexture(bmp_texture);
+    }
+    void set_position(Position* p) {
+        pos = p;
     }
     void load_media(SDL_Renderer* gRenderer) override {
         std::string file = "/Users/donaldsontan/Projects/mtd215/mtd215/assets/stickman.bmp";
@@ -29,7 +39,6 @@ public:
             throw SDL_Cannot_Load_Media(file, msg);
         }
         bmp_texture = SDL_CreateTextureFromSurface(gRenderer, bmp_surface);
-        std::cout << "bmp texture loaded" << std::endl;
         SDL_FreeSurface(bmp_surface);
     }
     void render(SDL_Renderer* gRenderer) override {
@@ -43,8 +52,8 @@ public:
         auto x = i % 4;
         auto y = i / 4;
         i = (i + 1) % 8;
-        source.x = x*WIDTH;
-        source.y = y*HEIGHT;
+        source.x = x*width+1;
+        source.y = y*height+1;
         Vector2D coord = position()->get_coord();
         destination.x = coord.x;
         destination.y = coord.y;
@@ -54,21 +63,27 @@ public:
 class StickmanController: public Controller {
 public:
     StickmanController(Position* p, Animation* a): Controller(p,a) {
-        add_keyboard_input(SDL_SCANCODE_W, [p,a] (bool& quit) {
+        auto up = SDL_SCANCODE_W;
+        auto down = SDL_SCANCODE_S;
+        auto left = SDL_SCANCODE_A;
+        auto right = SDL_SCANCODE_D;
+        auto pause = SDL_SCANCODE_SPACE;
+        
+        add_keyboard_input(up, [p,a] (bool& quit) {
             std::cout << "up key is pressed" << std::endl;
             if(!a->is_suspended()) {
                 auto v = p->get_velocity();
                 if(v.y > 0) p->set_velocity(v.x, -v.y);
             }
         });
-        add_keyboard_input(SDL_SCANCODE_S, [p,a] (bool& quit) {
+        add_keyboard_input(down, [p,a] (bool& quit) {
             std::cout << "down key is pressed" << std::endl;
             if(!a->is_suspended()) {
                 auto v = p->get_velocity();
                 if(v.y < 0) p->set_velocity(v.x, -v.y);
             }
         });
-        add_keyboard_input(SDL_SCANCODE_A, [p,a] (bool& quit) {
+        add_keyboard_input(left, [p,a] (bool& quit) {
             std::cout << "left key is pressed" << std::endl;
             if(!a->is_suspended()) {
                 auto v = p->get_velocity();
@@ -78,7 +93,7 @@ public:
                 }
             }
         });
-        add_keyboard_input(SDL_SCANCODE_D, [p,a] (bool& quit) {
+        add_keyboard_input(right, [p,a] (bool& quit) {
             std::cout << "right key is pressed" << std::endl;
             if(!a->is_suspended()) {
                 auto v = p->get_velocity();
@@ -89,7 +104,7 @@ public:
             }
         });
 
-        add_keyboard_input(SDL_SCANCODE_SPACE, [p,a] (bool& quit) {
+        add_keyboard_input(pause, [p,a] (bool& quit) {
             std::cout << "pause key is pressed" << std::endl;
             if(a->is_suspended()) {
                 a->unsuspend();
@@ -103,24 +118,28 @@ public:
 };
 
 class Stickman: public GameObject {
+    Position p{0,0,WIDTH,HEIGHT};
+    StickmanAnimation a{&p};
+    StickmanController c{&p,&a};
 public:
-    static const int WIDTH, HEIGHT, DELAY;
-    Stickman(Position* p, Animation* a, Controller* c): GameObject{p,a,c} {}
-    Stickman(double x, double y): GameObject(x,y,WIDTH,HEIGHT) {
-        auto p = position();
-        p->set_velocity(2,2);
-        set_animation(new StickmanAnimation(p));
-        auto a = animation();
-        set_controller(new StickmanController(p,a));
+    static const double WIDTH, HEIGHT;
+    static const int DELAY;
+    Stickman(double x, double y, uint32_t d) {
+        p.set_velocity(2,2);
+        p.set_coord(x,y);
+        a.set_delay(d);
     }
-    ~Stickman() {
-        delete animation();
-        delete controller();
+    Position* position() override {
+        return &p;
+    }
+    Animation* animation() override {
+        return &a;
+    }
+    Controller* controller() override {
+        return &c;
     }
 };
 
-const int Stickman::WIDTH = 400, Stickman::HEIGHT = 366;
-
-const int StickmanAnimation::WIDTH = 400, StickmanAnimation::HEIGHT = 366, StickmanAnimation::DELAY = 2;
+const double Stickman::WIDTH = 400, Stickman::HEIGHT = 344;
 
 #endif

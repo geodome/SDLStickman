@@ -7,33 +7,23 @@
 #include "controller.h"
 
 class GameObject {
-    Position* pos;
-    Animation* anime;
-    Controller* ctrl;
+    Position* p;
+    Animation* a;
+    Controller* c;
 public:
-    GameObject(double x, double y, double w, double h) {
-        pos = new Position(x,y,w,h);
+    GameObject() {}
+    virtual ~GameObject() {}
+    virtual Position* position() {
+        if(p == nullptr) throw std::runtime_error("position is null pointer");
+        return p;
     }
-    GameObject(Position* p, Animation* a, Controller * c): pos{p}, anime{a}, ctrl{c} {}
-    virtual ~GameObject() {
-        delete position();
+    virtual Animation* animation() {
+        if(a == nullptr) throw std::runtime_error("animation is null pointer");
+        return a;
     }
-    void set_animation(Animation* a) {
-        anime = a;
-    }
-    Animation* animation() {
-        if(anime == nullptr) throw std::runtime_error{"no animation object was defined for this game object"};
-        return anime;
-    }
-    Position* position() {
-        return pos;
-    }
-    void set_controller(Controller* c) {
-        ctrl = c;
-    }
-    Controller* controller() {
-        if(ctrl == nullptr) throw std::runtime_error("no controller object was defined for this game object");
-        return ctrl;
+    virtual Controller* controller() {
+        if(c == nullptr) throw std::runtime_error("controller is null pointer");
+        return c;
     }
 };
 #endif

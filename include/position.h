@@ -9,12 +9,19 @@ class Position {
     Vector2D coord{}, velocity{}, acceleration{};
     bool suspended{false};
 public:
+    Position(): coord(0,0), width{0}, height{0} {}
     Position(double x, double y, double w, double h): coord{x,y}, width{w}, height{h} {}
     double get_width() {
         return width;
     }
     double get_height() {
         return height;
+    }
+    void set_width(double w) {
+        width = w;
+    }
+    void set_height(double h) {
+        height = h;
     }
     void set_coord(double x, double y) {
         coord = {x, y};
