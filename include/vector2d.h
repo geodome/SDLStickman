@@ -48,4 +48,19 @@ std::ostream& operator<<(std::ostream& out, Vector2D other) {
     return out;
 }
 
+class Position {
+public:
+    Vector2D coord, velocity, acceleration;
+    Position(double x, double y, double vx, double vy, double ax, double ay) {
+        coord = {x,y};
+        velocity = {vx, vy};
+        acceleration = {ax, ay};
+    }
+    
+    void tick() {
+        coord += velocity;
+        velocity += acceleration;
+    }
+};
 #endif
+

@@ -1,20 +1,24 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
+#include <memory>
 #include <iostream>
 #include <vector>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_scancode.h>
+#include <SDL2/SDL_events.h>
 #include "exceptions.h"
 #include "gameobject.h"
 #include "stickman.h"
-#include "position.h"
+#include "vector2d.h"
+#include "eventemitter.h"
 
 class System {
     static const int PERIOD;
     SDL_Window* gWindow;
     SDL_Renderer* gRenderer;
-    std::vector<GameObject*> game_objects{};
     int WIDTH, HEIGHT;
+    bool quit = false;
 public:
     System(int w, int h): WIDTH{w}, HEIGHT{h} {
         if(SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -32,70 +36,40 @@ public:
             SDL_Quit();
             throw SDL_Cannot_Init(SDL_GetError());
         }
-        
-    }
+            }
     ~System() {
         SDL_DestroyRenderer(gRenderer);
         SDL_DestroyWindow(gWindow);
         SDL_Quit();
     }
-    void tick() {
-        for(auto obj: game_objects) {
-            obj->animation()->tick();
-        }
-    }
-    void update() {
-        for(auto obj: game_objects) {
-            obj->animation()->update();
-            obj->position()->next();
-        }
-    }
-    void render() {
-        //SDL_RenderClear(gRenderer);
-        SDL_SetRenderDrawColor(gRenderer,255,255,255,255);
-        SDL_RenderFillRect(gRenderer,nullptr);
-        for(auto obj: game_objects) {
-            obj->animation()->render(gRenderer);
-        }
-        SDL_RenderPresent(gRenderer);
-    }
-    void add_game_object(GameObject* ptr) {
-        game_objects.push_back(ptr);
-    };
-    void handle_events(bool& quit) {
-        SDL_Event e;
-        while(SDL_PollEvent(&e)) {
-            if(e.type == SDL_QUIT) {
-                quit = true;
-                break;
-            }
-            if(quit) break;
-            for(auto obj: game_objects) {
-                obj->controller()->handle_mouse_events(e, quit);
-                obj->controller()->handle_keyboard_events(e, quit);
-                if(quit) break;
-            }
-        }
-    }
+    
     void main_loop() {
-        auto quit = false;
+        auto quit_main_loop = EventEmitter::system_quit->then("quit_main_loop", [this] (const bool&) {
+            this->quit = true;
+            return true;
+        });
         while(!quit) {
-            handle_events(quit);
-            if(quit) break;
-            update();
-            render();
-            tick();
+            EventEmitter::handle_input_events(quit);
+            EventEmitter::system_update->notify(true);
+
+            SDL_SetRenderDrawColor(gRenderer,255,255,255,255);
+            SDL_RenderFillRect(gRenderer,nullptr);
+            EventEmitter::system_render->notify(gRenderer);
+            SDL_RenderPresent(gRenderer);
+
+            EventEmitter::system_tick->notify(true);
             SDL_Delay(PERIOD);
         }
     }
+    
     void start_demo() {
-        auto s = Stickman(20,20,2);
-        add_game_object(&s);
+        auto s = Stickman(20,20,-2,2);
+        
         main_loop();
     }
 };
 
-const int System::PERIOD = 30;
+const int System::PERIOD = 10;
 
 
 #endif
