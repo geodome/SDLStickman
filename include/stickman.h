@@ -174,7 +174,7 @@ public:
         EventEmitter::key_down->erase(is_left_key);
         EventEmitter::key_down->erase(is_right_key);
         EventEmitter::key_down->erase(is_pause_key);
-        EventEmitter::key_down->erase(is_up_key);
+        EventEmitter::key_down->erase(is_quit_key);
     }
 };
 
