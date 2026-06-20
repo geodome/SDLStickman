@@ -2,6 +2,7 @@
 #define SYSTEM_H
 
 #include <memory>
+#include <string>
 #include <iostream>
 #include <vector>
 #include <SDL2/SDL.h>
@@ -19,6 +20,7 @@ class System {
     SDL_Renderer* gRenderer;
     int WIDTH, HEIGHT;
     bool quit = false;
+    std::string quit_main_loop = "quit_main_loop";
 public:
     System(int w, int h): WIDTH{w}, HEIGHT{h} {
         if(SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -36,15 +38,10 @@ public:
             SDL_Quit();
             throw SDL_Cannot_Init(SDL_GetError());
         }
-            }
-    ~System() {
-        SDL_DestroyRenderer(gRenderer);
-        SDL_DestroyWindow(gWindow);
-        SDL_Quit();
     }
     
     void main_loop() {
-        auto quit_main_loop = EventEmitter::system_quit->then("quit_main_loop", [this] (const bool&) {
+        EventEmitter::system_quit->then(quit_main_loop, [this] (const bool&) {
             this->quit = true;
             return true;
         });
@@ -67,6 +64,14 @@ public:
         
         main_loop();
     }
+    
+    ~System() {
+        EventEmitter::system_quit->erase(quit_main_loop);
+        SDL_DestroyRenderer(gRenderer);
+        SDL_DestroyWindow(gWindow);
+        SDL_Quit();
+    }
+
 };
 
 const int System::PERIOD = 10;
