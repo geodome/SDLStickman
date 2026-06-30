@@ -1,11 +1,12 @@
 #include <iostream>
 #include "exceptions.h"
 #include "system.h"
+#include "swordman.h"
 
 int main(int argc, char* argv[]) {
     try {
-        auto s = System(1200,600);
-        s.start_demo();
+        auto s = System();
+        s.main_loop();
     } catch(SDL_Cannot_Init& e) {
         std::cerr << e.what() << std::endl;
         return 1;

@@ -10,9 +10,9 @@ class myexception: public std::exception {
 public:
     myexception(char* msg): message{std::string{msg}} {};
     myexception(std::string msg): message{std::move(msg)} {};
-    myexception(std::string tag, std::string msg):
+    myexception(const std::string& tag, const std::string& msg):
         message{std::format("{} : {}", tag, msg)} {}
-    myexception(std::string tag, char* msg):
+    myexception(const std::string& tag, char* msg):
         message{std::format("{} : {}", tag, std::string{msg})} {}
     std::string what() {
         return message;

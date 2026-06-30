@@ -2,21 +2,76 @@
 #define SPRITE_H
 
 #include <string>
-#include <stdexcept>
+#include "eventemitter.h"
+#include "uuid.h"
 
 class Sprite {
-    uint32_t period{1};
-    uint32_t ticker{0};
+    RenderOrder ro;
+    std::string uuid;
+    std::vector<std::string> tick_handlers;
+    std::vector<std::string> update_handlers;
+    std::vector<std::string> render_handlers;
 public:
-    Sprite(uint32_t p): period{p} {
-        if(p == 0) throw std::invalid_argument("period is at least 1 tick.");
+
+    Sprite(RenderOrder r): ro{r}, uuid{generate_uuid_v4()} {}
+    
+    virtual void load_media(SDL_Renderer*) {}
+    
+    void add_tick_handler(const std::string& n, std::function<bool(const bool&)> handler) {
+        auto name = std::format("Sprite {}: tick : {}", uuid, n);
+        EventEmitter::system_tick->then(name, handler);
+        tick_handlers.push_back(name);
     }
-    void tick() {
-        ticker = (ticker + 1) % period;
+    
+    void add_update_handler(const std::string& n, std::function<bool(const bool&)> handler) {
+        auto name = std::format("Sprite {} : update handler : ", uuid, n);
+        EventEmitter::system_update->then(name, handler);
+        update_handlers.push_back(name);
     }
-    bool to_update() {
-        return ticker == 0;
+    
+    void add_render_handler(const std::string& n, std::function<bool(SDL_Renderer*)> handler) {
+        std::string name;
+        switch(ro) {
+            case RenderOrder::BACKGROUND:
+                name = std::format("Sprite {}: Render Background: {}", uuid, n);
+                EventEmitter::render_background->then(name, handler);
+                break;
+            case RenderOrder::MIDGROUND:
+                name = std::format("Sprite {}: Render Midground: {}", uuid, n);
+                EventEmitter::render_midground->then(name, handler);
+                break;
+            case RenderOrder::FOREGROUND:
+                name = std::format("Sprite {}: Render Foreground: {}", uuid, n);
+                EventEmitter::render_foreground->then(name, handler);
+                break;
+        }
+        render_handlers.push_back(name);
     }
+    
+    ~Sprite() {
+        for(auto& s: tick_handlers) {
+            EventEmitter::system_update->erase(s);
+        }
+        for(auto& s: update_handlers) {
+            EventEmitter::system_update->erase(s);
+        }
+        switch(ro) {
+            case RenderOrder::BACKGROUND:
+                for(auto& s: render_handlers) EventEmitter::render_background->erase(s);
+                break;
+            case RenderOrder::MIDGROUND:
+                for(auto& s: render_handlers) EventEmitter::render_background->erase(s);
+                break;
+            case RenderOrder::FOREGROUND:
+                for(auto& s: render_handlers) EventEmitter::render_background->erase(s);
+                break;
+        }
+    }
+};
+
+class Shape: public Sprite {
+public:
+    Shape(RenderOrder ro): Sprite(ro) {}
 };
 
 #endif
