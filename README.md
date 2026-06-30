@@ -30,6 +30,7 @@ Each Entity is composed of sub-interfaces that manages different events:
 * Sprite: loads and displays a series of images to form an animation
 * Shape: objects that are directly created by the programmer without using media or images.
 * BoundingBox: To detect and handle collision between entities
+* Controller: Updates other components of the Entity in response to user's input.
 
 When programming an Entity, there is no need to access EventEmitter because it is lower tier in the logic hierachy.
 
