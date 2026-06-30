@@ -1,6 +1,6 @@
 # SDLStickman v0.3.0
 
-![App Demo](demo/Stickman_Animationm_v0.3.0.gif)
+![App Demo](https://github.com/geodome/SDLStickman/blob/main/demo/Stickman_Animation_v0.3.0.gif )
 He yields a sword and strikes fear in his enemy's heart.
 
 ### How to play
