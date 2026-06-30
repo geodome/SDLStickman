@@ -63,6 +63,10 @@ public:
         for(int i = 0; i<11; i++) {
             SDL_DestroyTexture(armed_attack[i]);
         }
+        for(int i = 9; i<4; i++) {
+            SDL_DestroyTexture(armed_climb[i]);
+            SDL_DestroyTexture(unarmed_climb[i]);
+        }
     }
     void setup_controller() override {
         controller.add_keydown_handler("toggle_sword_mode", [this] (const SDL_Scancode& sc) {
