@@ -1,6 +1,6 @@
 # SDLStickman v0.3.0
 
-He yield a sword and strikes fear in his enemy's heart.
+He yields a sword and strikes fear in his enemy's heart.
 
 ### How to play
 
