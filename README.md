@@ -1,4 +1,44 @@
-# SDLStickman v0.2.0
+# SDLStickman v0.3.0
+
+He yield a sword and strikes fear in his enemy's heart.
+
+### How to play
+
+His movement is manipulated by pressing the W,A,S,D keys. 
+
+To equip with sword, press Q. To attack with sword, press the space bar.
+
+To exit, press the Escape Key.
+
+### Overall Design
+
+The software architecture is based on the Event-Driven Entity Component System.
+
+System::main_loop() is responsible for triggering the EventEmitter which emits specific event such as:
+* system events: system_tick, system_upate, system_render
+* input events: key_press_down, key_press_up, mouse_single_click, mouse_double_click, mouse_right_click.
+
+System::render is broken down into 3 phases to support Render Ordering:
+* Render handlers triggered by EventEmitter::render_background are executed first,
+* Render handlers triggered by EventEmitter::render_midground are executed next,
+* Render handlers triggered by EventEmitter::render_foreground are executed last.
+
+An Entity is any game object, which may be the player, villian, NPC or an obstacle such as a wall or ladder.
+
+Each Entity is composed of sub-interfaces that manages different events:
+* Position: manages the coordinate, velocity and acceeration
+* Sprite: loads and displays a series of images to form an animation
+* Shape: objects that are directly created by the programmer without using media or images.
+* BoundingBox: To detect and handle collision between entities
+
+When programming an Entity, there is no need to access EventEmitter because it is lower tier in the logic hierachy.
+
+### Next Phase
+
+To work on BoundingBox logic and enable new Entities like villian and walls interacting with the Player.
+
+
+## SDLStickman v0.2.0
 
 Simple Stickman Animation using SDL2
 
