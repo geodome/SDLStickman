@@ -43,9 +43,9 @@ public:
             return true;
         });
         
-        controller.add_keydown_handler("quit on Escape", [] (const SDL_Scancode& sc) {
+        controller.add_keydown_handler("quit on Escape", [this] (const SDL_Scancode& sc) {
             if(sc != SDL_SCANCODE_ESCAPE) return false;
-            EventEmitter::system_quit->notify(true);
+            this->controller.system_quit();
             return true;
         });
     }
