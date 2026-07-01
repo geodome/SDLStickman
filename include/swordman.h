@@ -13,8 +13,10 @@ enum SwordmanState {
     ARMED_IDLE_BACKWARD,
     ARMED_WALK_FORWARD,
     ARMED_WALK_BACKWARD,
-    ARMED_CLIMB_UP,
-    ARMED_CLIMB_DOWN,
+    ARMED_CLIMB_UP_FORWARD,
+    ARMED_CLIMB_UP_BACKWARD,
+    ARMED_CLIMB_DOWN_FORWARD,
+    ARMED_CLIMB_DOWN_BACKWARD,
     ARMED_ATTACK_IDLE_FORWARD,
     ARMED_ATTACK_IDLE_BACKWARD,
     ARMED_ATTACK_WALK_FORWARD,
@@ -23,8 +25,10 @@ enum SwordmanState {
     UNARMED_IDLE_BACKWARD,
     UNARMED_WALK_FORWARD,
     UNARMED_WALK_BACKWARD,
-    UNARMED_CLIMB_UP,
-    UNARMED_CLIMB_DOWN,
+    UNARMED_CLIMB_UP_FORWARD,
+    UNARMED_CLIMB_UP_BACKWARD,
+    UNARMED_CLIMB_DOWN_FORWARD,
+    UNARMED_CLIMB_DOWN_BACKWARD
 };
 
 class Swordman: public Entity {
@@ -79,27 +83,41 @@ class Swordman: public Entity {
                 position.velocity.x = -vx;
                 position.velocity.y = 0;
                 break;
-            case UNARMED_CLIMB_UP:
-            case ARMED_CLIMB_UP:
+            case UNARMED_CLIMB_UP_FORWARD:
+            case ARMED_CLIMB_UP_FORWARD:
                 state = s;
                 flip = SDL_FLIP_NONE;
                 position.velocity.x = 0;
                 position.velocity.y = -vx;
                 break;
-            case UNARMED_CLIMB_DOWN:
-            case ARMED_CLIMB_DOWN:
+            case UNARMED_CLIMB_UP_BACKWARD:
+            case ARMED_CLIMB_UP_BACKWARD:
+                state = s;
+                flip = SDL_FLIP_HORIZONTAL;
+                position.velocity.x = 0;
+                position.velocity.y = -vx;
+                break;
+            case UNARMED_CLIMB_DOWN_FORWARD:
+            case ARMED_CLIMB_DOWN_FORWARD:
                 state = s;
                 flip = SDL_FLIP_NONE;
                 position.velocity.x = 0;
                 position.velocity.y = vx;
                 break;
+            case UNARMED_CLIMB_DOWN_BACKWARD:
+            case ARMED_CLIMB_DOWN_BACKWARD:
+                state = s;
+                flip = SDL_FLIP_HORIZONTAL;
+                position.velocity.x = 0;
+                position.velocity.y = vx;
+                break;
+
         }
     }
 public:
     Swordman(double x, double y, SwordmanState s = SwordmanState::UNARMED_IDLE_FORWARD): Entity(EntityRole::PLAYER) {
         position = {x,y,0,0,0,0};
-        state = s;
-        flip = SDL_FLIP_NONE;
+        set_state(s);
         setup_controller();
         setup_sprite();
     }
@@ -155,6 +173,22 @@ public:
                     this->set_state(UNARMED_WALK_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
+                case ARMED_CLIMB_UP_BACKWARD:
+                    this->set_state(UNARMED_CLIMB_UP_BACKWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case ARMED_CLIMB_UP_FORWARD:
+                    this->set_state(UNARMED_CLIMB_UP_FORWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case ARMED_CLIMB_DOWN_BACKWARD:
+                    this->set_state(UNARMED_CLIMB_DOWN_BACKWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case ARMED_CLIMB_DOWN_FORWARD:
+                    this->set_state(UNARMED_CLIMB_DOWN_FORWARD);
+                    this->sprite_ticker = 0;
+                    return true;
                 case UNARMED_IDLE_FORWARD:
                     this->set_state(ARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
@@ -171,20 +205,20 @@ public:
                     this->set_state(ARMED_WALK_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
-                case UNARMED_CLIMB_UP:
-                    this->set_state(UNARMED_CLIMB_UP);
+                case UNARMED_CLIMB_UP_FORWARD:
+                    this->set_state(ARMED_CLIMB_UP_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
-                case UNARMED_CLIMB_DOWN:
-                    this->set_state(ARMED_CLIMB_DOWN);
+                case UNARMED_CLIMB_UP_BACKWARD:
+                    this->set_state(ARMED_CLIMB_UP_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
-                case ARMED_CLIMB_UP:
-                    this->set_state(UNARMED_CLIMB_UP);
+                case UNARMED_CLIMB_DOWN_FORWARD:
+                    this->set_state(ARMED_CLIMB_DOWN_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
-                case ARMED_CLIMB_DOWN:
-                    this->set_state(UNARMED_CLIMB_DOWN);
+                case UNARMED_CLIMB_DOWN_BACKWARD:
+                    this->set_state(ARMED_CLIMB_DOWN_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
             }
@@ -240,15 +274,19 @@ public:
         controller.add_keydown_handler("forward_arrow_keydown", [this] (const SDL_Scancode& sc) {
             if(sc != SDL_SCANCODE_D) return false;
             switch(this->state) {
-                case UNARMED_CLIMB_UP:
-                case UNARMED_CLIMB_DOWN:
+                case UNARMED_CLIMB_UP_FORWARD:
+                case UNARMED_CLIMB_UP_BACKWARD:
+                case UNARMED_CLIMB_DOWN_FORWARD:
+                case UNARMED_CLIMB_DOWN_BACKWARD:
                 case UNARMED_IDLE_FORWARD:
                 case UNARMED_IDLE_BACKWARD:
                     this->set_state(UNARMED_WALK_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
-                case ARMED_CLIMB_UP:
-                case ARMED_CLIMB_DOWN:
+                case ARMED_CLIMB_UP_FORWARD:
+                case ARMED_CLIMB_UP_BACKWARD:
+                case ARMED_CLIMB_DOWN_FORWARD:
+                case ARMED_CLIMB_DOWN_BACKWARD:
                 case ARMED_IDLE_FORWARD:
                 case ARMED_IDLE_BACKWARD:
                     this->set_state(ARMED_WALK_FORWARD);
@@ -285,15 +323,19 @@ public:
         controller.add_keydown_handler("backward_arrow_keydown", [this] (const SDL_Scancode& sc) {
             if(sc != SDL_SCANCODE_A) return false;
             switch(this->state) {
-                case UNARMED_CLIMB_UP:
-                case UNARMED_CLIMB_DOWN:
+                case UNARMED_CLIMB_UP_FORWARD:
+                case UNARMED_CLIMB_UP_BACKWARD:
+                case UNARMED_CLIMB_DOWN_FORWARD:
+                case UNARMED_CLIMB_DOWN_BACKWARD:
                 case UNARMED_IDLE_BACKWARD:
                 case UNARMED_IDLE_FORWARD:
                     this->set_state(UNARMED_WALK_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
-                case ARMED_CLIMB_UP:
-                case ARMED_CLIMB_DOWN:
+                case ARMED_CLIMB_UP_FORWARD:
+                case ARMED_CLIMB_UP_BACKWARD:
+                case ARMED_CLIMB_DOWN_FORWARD:
+                case ARMED_CLIMB_DOWN_BACKWARD:
                 case ARMED_IDLE_BACKWARD:
                 case ARMED_IDLE_FORWARD:
                     this->set_state(ARMED_WALK_BACKWARD);
@@ -331,17 +373,23 @@ public:
             if(sc != SDL_SCANCODE_W) return false;
             switch(this->state) {
                 case ARMED_IDLE_FORWARD:
-                case ARMED_IDLE_BACKWARD:
                 case ARMED_WALK_FORWARD:
+                    this->set_state(ARMED_CLIMB_UP_FORWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case ARMED_IDLE_BACKWARD:
                 case ARMED_WALK_BACKWARD:
-                    this->set_state(ARMED_CLIMB_UP);
+                    this->set_state(ARMED_CLIMB_UP_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case UNARMED_IDLE_FORWARD:
-                case UNARMED_IDLE_BACKWARD:
                 case UNARMED_WALK_FORWARD:
+                    this->set_state(UNARMED_CLIMB_UP_FORWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case UNARMED_IDLE_BACKWARD:
                 case UNARMED_WALK_BACKWARD:
-                    this->set_state(UNARMED_CLIMB_UP);
+                    this->set_state(UNARMED_CLIMB_UP_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 default:
@@ -351,12 +399,20 @@ public:
         controller.add_keyup_handler("climb_up_keyup", [this] (const SDL_Scancode& sc) {
             if(sc != SDL_SCANCODE_W) return false;
             switch(this->state) {
-                case UNARMED_CLIMB_UP:
+                case UNARMED_CLIMB_UP_FORWARD:
                     this->set_state(UNARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
-                case ARMED_CLIMB_UP:
+                case UNARMED_CLIMB_UP_BACKWARD:
+                    this->set_state(UNARMED_IDLE_BACKWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case ARMED_CLIMB_UP_FORWARD:
                     this->set_state(ARMED_IDLE_FORWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case ARMED_CLIMB_UP_BACKWARD:
+                    this->set_state(ARMED_IDLE_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 default:
@@ -367,17 +423,23 @@ public:
             if(sc != SDL_SCANCODE_S) return false;
             switch(this->state) {
                 case ARMED_IDLE_FORWARD:
-                case ARMED_IDLE_BACKWARD:
                 case ARMED_WALK_FORWARD:
+                    this->set_state(ARMED_CLIMB_DOWN_FORWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case ARMED_IDLE_BACKWARD:
                 case ARMED_WALK_BACKWARD:
-                    this->set_state(ARMED_CLIMB_DOWN);
+                    this->set_state(ARMED_CLIMB_DOWN_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case UNARMED_IDLE_FORWARD:
-                case UNARMED_IDLE_BACKWARD:
                 case UNARMED_WALK_FORWARD:
+                    this->set_state(UNARMED_CLIMB_DOWN_FORWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case UNARMED_IDLE_BACKWARD:
                 case UNARMED_WALK_BACKWARD:
-                    this->set_state(UNARMED_CLIMB_DOWN);
+                    this->set_state(UNARMED_CLIMB_DOWN_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 default:
@@ -388,11 +450,19 @@ public:
         controller.add_keyup_handler("climb_down_keyup", [this] (const SDL_Scancode& sc) {
             if(sc != SDL_SCANCODE_S) return false;
             switch(this->state) {
-                case UNARMED_CLIMB_DOWN:
+                case UNARMED_CLIMB_DOWN_BACKWARD:
+                    this->set_state(UNARMED_IDLE_BACKWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case UNARMED_CLIMB_DOWN_FORWARD:
                     this->set_state(UNARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
-                case ARMED_CLIMB_DOWN:
+                case ARMED_CLIMB_DOWN_BACKWARD:
+                    this->set_state(ARMED_IDLE_BACKWARD);
+                    this->sprite_ticker = 0;
+                    return true;
+                case ARMED_CLIMB_DOWN_FORWARD:
                     this->set_state(ARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
@@ -408,10 +478,14 @@ public:
             this->ticker = (this->ticker + 1) % Swordman::PERIOD;
             if(this->ticker != 0) return false;
             switch(this->state) {
-                case UNARMED_CLIMB_UP:
-                case UNARMED_CLIMB_DOWN:
-                case ARMED_CLIMB_UP:
-                case ARMED_CLIMB_DOWN:
+                case UNARMED_CLIMB_UP_FORWARD:
+                case UNARMED_CLIMB_UP_BACKWARD:
+                case UNARMED_CLIMB_DOWN_BACKWARD:
+                case UNARMED_CLIMB_DOWN_FORWARD:
+                case ARMED_CLIMB_UP_FORWARD:
+                case ARMED_CLIMB_UP_BACKWARD:
+                case ARMED_CLIMB_DOWN_FORWARD:
+                case ARMED_CLIMB_DOWN_BACKWARD:
                     this->sprite_ticker = (this->sprite_ticker + 1) % 4;
                     break;
                 case ARMED_ATTACK_WALK_FORWARD:
@@ -452,16 +526,16 @@ public:
                 case UNARMED_WALK_BACKWARD:
                     this->current = this->unarmed_idle[this->sprite_ticker];
                     break;
-                case UNARMED_CLIMB_UP:
+                case UNARMED_CLIMB_UP_FORWARD:
+                case UNARMED_CLIMB_UP_BACKWARD:
+                case UNARMED_CLIMB_DOWN_FORWARD:
+                case UNARMED_CLIMB_DOWN_BACKWARD:
                     this->current = this->unarmed_climb[this->sprite_ticker];
                     break;
-                case UNARMED_CLIMB_DOWN:
-                    this->current = this->unarmed_climb[this->sprite_ticker];
-                    break;
-                case ARMED_CLIMB_UP:
-                    this->current = this->armed_climb[this->sprite_ticker];
-                    break;
-                case ARMED_CLIMB_DOWN:
+                case ARMED_CLIMB_UP_FORWARD:
+                case ARMED_CLIMB_UP_BACKWARD:
+                case ARMED_CLIMB_DOWN_FORWARD:
+                case ARMED_CLIMB_DOWN_BACKWARD:
                     this->current = this->armed_climb[this->sprite_ticker];
                     break;
             }
