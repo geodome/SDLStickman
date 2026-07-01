@@ -111,9 +111,9 @@ class Swordman: public Entity {
                 position.velocity.x = 0;
                 position.velocity.y = vx;
                 break;
-
         }
     }
+    
 public:
     Swordman(double x, double y, SwordmanState s = SwordmanState::UNARMED_IDLE_FORWARD): Entity(EntityRole::PLAYER) {
         position = {x,y,0,0,0,0};
@@ -518,27 +518,28 @@ public:
                 case ARMED_ATTACK_WALK_BACKWARD:
                     this->current = this->armed_attack[this->sprite_ticker];
                     break;
-                case UNARMED_IDLE_FORWARD:
-                case UNARMED_IDLE_BACKWARD:
-                    this->current = this->unarmed_idle[this->sprite_ticker];
-                    break;
-                case UNARMED_WALK_FORWARD:
-                case UNARMED_WALK_BACKWARD:
-                    this->current = this->unarmed_idle[this->sprite_ticker];
-                    break;
-                case UNARMED_CLIMB_UP_FORWARD:
-                case UNARMED_CLIMB_UP_BACKWARD:
-                case UNARMED_CLIMB_DOWN_FORWARD:
-                case UNARMED_CLIMB_DOWN_BACKWARD:
-                    this->current = this->unarmed_climb[this->sprite_ticker];
-                    break;
                 case ARMED_CLIMB_UP_FORWARD:
                 case ARMED_CLIMB_UP_BACKWARD:
                 case ARMED_CLIMB_DOWN_FORWARD:
                 case ARMED_CLIMB_DOWN_BACKWARD:
                     this->current = this->armed_climb[this->sprite_ticker];
                     break;
+                case UNARMED_IDLE_FORWARD:
+                case UNARMED_IDLE_BACKWARD:
+                    this->current = this->unarmed_idle[this->sprite_ticker];
+                    break;
+                case UNARMED_WALK_FORWARD:
+                case UNARMED_WALK_BACKWARD:
+                    this->current = this->unarmed_walk[this->sprite_ticker];
+                    break;
+                case UNARMED_CLIMB_UP_FORWARD:
+                case UNARMED_CLIMB_DOWN_FORWARD:
+                case UNARMED_CLIMB_UP_BACKWARD:
+                case UNARMED_CLIMB_DOWN_BACKWARD:
+                    this->current = this->unarmed_climb[this->sprite_ticker];
+                    break;
             }
+
             return true;
         });
         
