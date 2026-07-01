@@ -408,6 +408,8 @@ public:
             this->ticker = (this->ticker + 1) % Swordman::PERIOD;
             if(this->ticker != 0) return false;
             switch(this->state) {
+                case UNARMED_CLIMB_UP:
+                case UNARMED_CLIMB_DOWN:
                 case ARMED_CLIMB_UP:
                 case ARMED_CLIMB_DOWN:
                     this->sprite_ticker = (this->sprite_ticker + 1) % 4;
@@ -417,8 +419,10 @@ public:
                 case ARMED_ATTACK_IDLE_FORWARD:
                 case ARMED_ATTACK_IDLE_BACKWARD:
                     this->sprite_ticker = (this->sprite_ticker + 1) % 11;
+                    break;
                 default:
                     this->sprite_ticker = (this->sprite_ticker + 1) % 8;
+                    break;
             }
             return true;
         });
