@@ -44,6 +44,57 @@ class Swordman: public Entity {
     SDL_RendererFlip flip;
     bool loaded = false;
     SwordmanState state;
+    void set_state(SwordmanState s) {
+        int vx = 2*Swordman::UNIT;
+        switch(s) {
+            case UNARMED_IDLE_FORWARD:
+            case ARMED_ATTACK_IDLE_FORWARD:
+            case ARMED_IDLE_FORWARD:
+                state = s;
+                flip = SDL_FLIP_NONE;
+                position.velocity.x = 0;
+                position.velocity.y = 0;
+                break;
+            case UNARMED_IDLE_BACKWARD:
+            case ARMED_ATTACK_IDLE_BACKWARD:
+            case ARMED_IDLE_BACKWARD:
+                state = s;
+                flip = SDL_FLIP_HORIZONTAL;
+                position.velocity.x = 0;
+                position.velocity.y = 0;
+                break;
+            case UNARMED_WALK_FORWARD:
+            case ARMED_ATTACK_WALK_FORWARD:
+            case ARMED_WALK_FORWARD:
+                state = s;
+                flip = SDL_FLIP_NONE;
+                position.velocity.x = vx;
+                position.velocity.y = 0;
+                break;
+            case UNARMED_WALK_BACKWARD:
+            case ARMED_ATTACK_WALK_BACKWARD:
+            case ARMED_WALK_BACKWARD:
+                state = s;
+                flip = SDL_FLIP_HORIZONTAL;
+                position.velocity.x = -vx;
+                position.velocity.y = 0;
+                break;
+            case UNARMED_CLIMB_UP:
+            case ARMED_CLIMB_UP:
+                state = s;
+                flip = SDL_FLIP_NONE;
+                position.velocity.x = 0;
+                position.velocity.y = -vx;
+                break;
+            case UNARMED_CLIMB_DOWN:
+            case ARMED_CLIMB_DOWN:
+                state = s;
+                flip = SDL_FLIP_NONE;
+                position.velocity.x = 0;
+                position.velocity.y = vx;
+                break;
+        }
+    }
 public:
     Swordman(double x, double y, SwordmanState s = SwordmanState::UNARMED_IDLE_FORWARD): Entity(EntityRole::PLAYER) {
         position = {x,y,0,0,0,0};
@@ -63,102 +114,98 @@ public:
         for(int i = 0; i<11; i++) {
             SDL_DestroyTexture(armed_attack[i]);
         }
-        for(int i = 9; i<4; i++) {
-            SDL_DestroyTexture(armed_climb[i]);
-            SDL_DestroyTexture(unarmed_climb[i]);
-        }
     }
     void setup_controller() override {
         controller.add_keydown_handler("toggle_sword_mode", [this] (const SDL_Scancode& sc) {
             if(sc != SDL_SCANCODE_Q) return false;
             switch(this->state) {
                 case ARMED_IDLE_FORWARD:
-                    this->state = UNARMED_IDLE_FORWARD;
+                    this->set_state(UNARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_IDLE_BACKWARD:
-                    this->state = UNARMED_IDLE_BACKWARD;
+                    this->set_state(UNARMED_IDLE_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_WALK_FORWARD:
-                    this->state = UNARMED_WALK_FORWARD;
+                    this->set_state(UNARMED_WALK_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_WALK_BACKWARD:
-                    this->state = UNARMED_WALK_BACKWARD;
+                    this->set_state(UNARMED_WALK_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_ATTACK_IDLE_FORWARD:
-                    this->state = UNARMED_IDLE_FORWARD;
+                    this->set_state(UNARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_ATTACK_WALK_FORWARD:
-                    this->state = UNARMED_WALK_FORWARD;
+                    this->set_state(UNARMED_WALK_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_ATTACK_IDLE_BACKWARD:
-                    this->state = UNARMED_IDLE_BACKWARD;
+                    this->set_state(UNARMED_IDLE_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_ATTACK_WALK_BACKWARD:
-                    this->state = UNARMED_WALK_BACKWARD;
+                    this->set_state(UNARMED_WALK_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case UNARMED_IDLE_FORWARD:
-                    this->state = ARMED_IDLE_FORWARD;
+                    this->set_state(ARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case UNARMED_IDLE_BACKWARD:
-                    this->state = ARMED_IDLE_BACKWARD;
+                    this->set_state(ARMED_IDLE_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case UNARMED_WALK_FORWARD:
-                    this->state = ARMED_WALK_FORWARD;
+                    this->set_state(ARMED_WALK_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case UNARMED_WALK_BACKWARD:
-                    this->state = ARMED_WALK_BACKWARD;
+                    this->set_state(ARMED_WALK_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case UNARMED_CLIMB_UP:
-                    this->state = UNARMED_CLIMB_UP;
+                    this->set_state(UNARMED_CLIMB_UP);
                     this->sprite_ticker = 0;
                     return true;
                 case UNARMED_CLIMB_DOWN:
-                    this->state = ARMED_CLIMB_DOWN;
+                    this->set_state(ARMED_CLIMB_DOWN);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_CLIMB_UP:
-                    this->state = UNARMED_CLIMB_UP;
+                    this->set_state(UNARMED_CLIMB_UP);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_CLIMB_DOWN:
-                    this->state = UNARMED_CLIMB_DOWN;
+                    this->set_state(UNARMED_CLIMB_DOWN);
                     this->sprite_ticker = 0;
                     return true;
             }
         });
         controller.add_keydown_handler("attack_keydown", [this] (const SDL_Scancode& sc) {
             if(sc != SDL_SCANCODE_SPACE) return false;
+            // only attack when in armed state
             switch(this->state) {
                 case ARMED_IDLE_FORWARD:
-                    this->state = ARMED_ATTACK_IDLE_FORWARD;
+                    this->set_state(ARMED_ATTACK_IDLE_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_IDLE_BACKWARD:
-                    this->state = ARMED_ATTACK_IDLE_BACKWARD;
+                    this->set_state(ARMED_ATTACK_IDLE_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_WALK_FORWARD:
-                    this->state = ARMED_ATTACK_WALK_FORWARD;
+                    this->set_state(ARMED_ATTACK_WALK_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_WALK_BACKWARD:
-                    this->state = ARMED_ATTACK_WALK_BACKWARD;
+                    this->set_state(ARMED_ATTACK_WALK_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 default:
-                    // no attack during climb
                     return false;
             }
         });
@@ -166,24 +213,22 @@ public:
             if(sc != SDL_SCANCODE_SPACE) return false;
             switch(this->state) {
                 case ARMED_ATTACK_IDLE_FORWARD:
-                    this->state = ARMED_IDLE_FORWARD;
+                    this->set_state(ARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_ATTACK_IDLE_BACKWARD:
-                    this->state = ARMED_IDLE_BACKWARD;
+                    this->set_state(ARMED_IDLE_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_ATTACK_WALK_FORWARD:
-                    this->state = ARMED_WALK_FORWARD;
+                    this->set_state(ARMED_WALK_FORWARD);
                     this->sprite_ticker = 0;
                     return true;
                 case ARMED_ATTACK_WALK_BACKWARD:
-                    this->state = ARMED_WALK_BACKWARD;
+                    this->set_state(ARMED_WALK_BACKWARD);
                     this->sprite_ticker = 0;
                     return true;
                 default:
-                    // no attack during climb
-                    
                     return false;
             }
         });
@@ -194,86 +239,40 @@ public:
                 case UNARMED_CLIMB_UP:
                 case UNARMED_CLIMB_DOWN:
                 case UNARMED_IDLE_FORWARD:
-                    this->state = UNARMED_WALK_FORWARD;
-                    this->sprite_ticker = 0;
-                    this->position.velocity.x = 2*Swordman::UNIT;
-                    this->position.velocity.y = 0;
-                    return true;
                 case UNARMED_IDLE_BACKWARD:
-                    this->state = UNARMED_WALK_FORWARD;
+                    this->set_state(UNARMED_WALK_FORWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 2*Swordman::UNIT;
-                    this->flip = SDL_FLIP_NONE;
-                    return true;
-                case UNARMED_WALK_FORWARD:
-                    return false;
-                case UNARMED_WALK_BACKWARD:
-                    this->state = UNARMED_WALK_FORWARD;
-                    this->sprite_ticker = 0;
-                    this->position.velocity.x = 2*Swordman::UNIT;
-                    this->flip = SDL_FLIP_NONE;
                     return true;
                 case ARMED_CLIMB_UP:
                 case ARMED_CLIMB_DOWN:
                 case ARMED_IDLE_FORWARD:
-                    this->state = ARMED_WALK_FORWARD;
-                    this->sprite_ticker = 0;
-                    this->position.velocity.x = 2*Swordman::UNIT;
-                    this->position.velocity.y = 0;
-                    return true;
                 case ARMED_IDLE_BACKWARD:
-                    this->state = ARMED_WALK_FORWARD;
+                    this->set_state(ARMED_WALK_FORWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 2*Swordman::UNIT;
-                    this->flip = SDL_FLIP_NONE;
                     return true;
-                case ARMED_WALK_FORWARD:
-                    return false;
-                case ARMED_WALK_BACKWARD:
-                    this->state = ARMED_WALK_FORWARD;
-                    this->sprite_ticker = 0;
-                    this->flip = SDL_FLIP_NONE;
-                    this->position.velocity.x = 2*Swordman::UNIT;
-                    return true;
-                case ARMED_ATTACK_IDLE_FORWARD:
-                    this->state = ARMED_ATTACK_WALK_FORWARD;
-                    this->sprite_ticker = 0;
-                    this->flip = SDL_FLIP_NONE;
-                    this->position.velocity.x = 2*Swordman::UNIT;
-                    return true;
-                case ARMED_ATTACK_WALK_FORWARD:
-                    return false;
                 case ARMED_ATTACK_IDLE_BACKWARD:
-                    this->state = ARMED_ATTACK_IDLE_FORWARD;
+                case ARMED_ATTACK_IDLE_FORWARD:
+                    this->set_state(ARMED_ATTACK_WALK_FORWARD);
                     this->sprite_ticker = 0;
-                    this->flip = SDL_FLIP_NONE;
-                    this->position.velocity.x = 2*Swordman::UNIT;
                     return true;
-                case ARMED_ATTACK_WALK_BACKWARD:
-                    this->state = ARMED_ATTACK_WALK_FORWARD;
-                    this->sprite_ticker = 0;
-                    this->flip = SDL_FLIP_NONE;
-                    this->position.velocity.x = 2*Swordman::UNIT;
-                    return true;
+                default:
+                    return false;
             }
         });
         controller.add_keyup_handler("forward_arrow_keyup", [this] (const SDL_Scancode& sc) {
             if(sc != SDL_SCANCODE_D) return false;
             switch(this->state) {
                 case ARMED_WALK_FORWARD:
-                    this->state = ARMED_IDLE_FORWARD;
+                    this->set_state(ARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
                     return true;
                 case UNARMED_WALK_FORWARD:
-                    this->state = UNARMED_IDLE_FORWARD;
+                    this->set_state(UNARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
                     return true;
                 case ARMED_ATTACK_WALK_FORWARD:
-                    this->state = ARMED_ATTACK_IDLE_FORWARD;
+                    this->set_state(ARMED_ATTACK_IDLE_FORWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
                     return true;
                 default:
                     return false;
@@ -282,28 +281,24 @@ public:
         controller.add_keydown_handler("backward_arrow_keydown", [this] (const SDL_Scancode& sc) {
             if(sc != SDL_SCANCODE_A) return false;
             switch(this->state) {
+                case UNARMED_CLIMB_UP:
+                case UNARMED_CLIMB_DOWN:
                 case UNARMED_IDLE_BACKWARD:
                 case UNARMED_IDLE_FORWARD:
-                case UNARMED_WALK_FORWARD:
-                    this->state = UNARMED_WALK_BACKWARD;
+                    this->set_state(UNARMED_WALK_BACKWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = -2*Swordman::UNIT;
-                    this->flip = SDL_FLIP_HORIZONTAL;
                     return true;
+                case ARMED_CLIMB_UP:
+                case ARMED_CLIMB_DOWN:
                 case ARMED_IDLE_BACKWARD:
                 case ARMED_IDLE_FORWARD:
-                case ARMED_WALK_FORWARD:
-                    this->state = ARMED_WALK_BACKWARD;
+                    this->set_state(ARMED_WALK_BACKWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = -2*Swordman::UNIT;
-                    this->flip = SDL_FLIP_HORIZONTAL;
                     return true;
-                case ARMED_ATTACK_WALK_FORWARD:
                 case ARMED_ATTACK_IDLE_FORWARD:
-                    this->state = ARMED_ATTACK_WALK_BACKWARD;
+                case ARMED_ATTACK_IDLE_BACKWARD:
+                    this->set_state(ARMED_ATTACK_WALK_BACKWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = -2*Swordman::UNIT;
-                    this->flip = SDL_FLIP_HORIZONTAL;
                     return true;
                 default:
                     return false;
@@ -313,19 +308,16 @@ public:
             if(sc != SDL_SCANCODE_A) return false;
             switch(this->state) {
                 case ARMED_WALK_BACKWARD:
-                    this->state = ARMED_IDLE_BACKWARD;
+                    this->set_state(ARMED_IDLE_BACKWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
                     return true;
                 case UNARMED_WALK_BACKWARD:
-                    this->state = UNARMED_IDLE_BACKWARD;
+                    this->set_state(UNARMED_IDLE_BACKWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
                     return true;
                 case ARMED_ATTACK_WALK_BACKWARD:
-                    this->state = ARMED_ATTACK_IDLE_BACKWARD;
+                    this->set_state(ARMED_ATTACK_IDLE_BACKWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
                     return true;
                 default:
                     return false;
@@ -338,21 +330,15 @@ public:
                 case ARMED_IDLE_BACKWARD:
                 case ARMED_WALK_FORWARD:
                 case ARMED_WALK_BACKWARD:
-                    this->state = ARMED_CLIMB_UP;
+                    this->set_state(ARMED_CLIMB_UP);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
-                    this->position.velocity.y = -2*Swordman::UNIT;
-                    this->flip = SDL_FLIP_NONE;
                     return true;
                 case UNARMED_IDLE_FORWARD:
                 case UNARMED_IDLE_BACKWARD:
                 case UNARMED_WALK_FORWARD:
                 case UNARMED_WALK_BACKWARD:
-                    this->state = UNARMED_CLIMB_UP;
+                    this->set_state(UNARMED_CLIMB_UP);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
-                    this->position.velocity.y = -2*Swordman::UNIT;
-                    this->flip = SDL_FLIP_NONE;
                     return true;
                 default:
                     return false;
@@ -362,18 +348,12 @@ public:
             if(sc != SDL_SCANCODE_W) return false;
             switch(this->state) {
                 case UNARMED_CLIMB_UP:
-                    this->state = UNARMED_IDLE_FORWARD;
+                    this->set_state(UNARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
-                    this->position.velocity.y = 0;
-                    this->flip = SDL_FLIP_NONE;
                     return true;
                 case ARMED_CLIMB_UP:
-                    this->state = ARMED_IDLE_FORWARD;
+                    this->set_state(ARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
-                    this->position.velocity.y = 0;
-                    this->flip = SDL_FLIP_NONE;
                     return true;
                 default:
                     return false;
@@ -386,21 +366,15 @@ public:
                 case ARMED_IDLE_BACKWARD:
                 case ARMED_WALK_FORWARD:
                 case ARMED_WALK_BACKWARD:
-                    this->state = ARMED_CLIMB_DOWN;
+                    this->set_state(ARMED_CLIMB_DOWN);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
-                    this->position.velocity.y = 2*Swordman::UNIT;
-                    this->flip = SDL_FLIP_NONE;
                     return true;
                 case UNARMED_IDLE_FORWARD:
                 case UNARMED_IDLE_BACKWARD:
                 case UNARMED_WALK_FORWARD:
                 case UNARMED_WALK_BACKWARD:
-                    this->state = UNARMED_CLIMB_DOWN;
+                    this->set_state(UNARMED_CLIMB_DOWN);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
-                    this->position.velocity.y = 2*Swordman::UNIT;
-                    this->flip = SDL_FLIP_NONE;
                     return true;
                 default:
                     return false;
@@ -411,23 +385,16 @@ public:
             if(sc != SDL_SCANCODE_S) return false;
             switch(this->state) {
                 case UNARMED_CLIMB_DOWN:
-                    this->state = UNARMED_IDLE_FORWARD;
+                    this->set_state(UNARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
-                    this->position.velocity.y = 0;
-                    this->flip = SDL_FLIP_NONE;
                     return true;
                 case ARMED_CLIMB_DOWN:
-                    this->state = ARMED_IDLE_FORWARD;
+                    this->set_state(ARMED_IDLE_FORWARD);
                     this->sprite_ticker = 0;
-                    this->position.velocity.x = 0;
-                    this->position.velocity.y = 0;
-                    this->flip = SDL_FLIP_NONE;
                     return true;
                 default:
                     return false;
             }
-
         });
 
     };
@@ -562,4 +529,3 @@ const uint32_t Swordman::PERIOD = 10;
 const double Swordman::UNIT = 1;
 
 #endif
-
