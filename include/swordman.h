@@ -115,11 +115,12 @@ class Swordman: public Entity {
     }
     
 public:
-    Swordman(double x, double y, SwordmanState s = SwordmanState::UNARMED_IDLE_FORWARD): Entity(EntityRole::PLAYER) {
+    Swordman(double x, double y, bool forward = true): Entity(EntityRole::PLAYER) {
         position = {x,y,0,0,0,0};
-        set_state(s);
-        setup_controller();
+        set_state(UNARMED_IDLE_FORWARD);
+        if(!forward) set_state(UNARMED_IDLE_BACKWARD);
         setup_sprite();
+        setup_controller();
     }
     ~Swordman() {
         if(!loaded) return;
