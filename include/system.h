@@ -78,7 +78,7 @@ public:
     }
 };
 
-const int System::PERIOD = 10;
+const int System::PERIOD = 16; // this gives u 1000/16 = 60fps
 const int System::WINDOW_WIDTH = 1200, System::WINDOW_HEIGHT = 600;
 
 #endif
