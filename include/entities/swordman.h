@@ -44,7 +44,7 @@ class Swordman: public Entity {
     SDL_Texture* unarmed_idle[8];
     SDL_Texture* unarmed_walk[8];
     SDL_Texture* unarmed_climb[4];
-    uint32_t ticker = 0, sprite_ticker = 0, attack_queue = 0;
+    uint32_t ticker = 0, sprite_ticker = 0;
     SDL_RendererFlip flip;
     bool loaded = false;
     SwordmanState state;
