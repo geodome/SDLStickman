@@ -15,7 +15,10 @@ enum RenderOrder {
 
 class EventEmitter {
 public:
+    static const SDL_Scancode QUIT_KEY, PAUSE_KEY;
+
     static const std::unique_ptr<Observable<bool>> system_quit;
+    static const std::unique_ptr<Observable<bool>> system_pause;
     static const std::unique_ptr<Observable<bool>> system_tick;
     static const std::unique_ptr<Observable<bool>> system_update;
     
@@ -25,7 +28,8 @@ public:
     static const std::shared_ptr<Observable<SDL_Renderer*>> render_foreground;
 
     static const std::unique_ptr<Observable<SDL_Scancode>> key_up;
-    static const std::unique_ptr<Observable<SDL_Scancode>> key_down;
+    static const std::unique_ptr<Observable<SDL_Scancode>> unfiltered_key_down;
+    static const std::shared_ptr<Observable<SDL_Scancode>> key_down;
     
     static const std::unique_ptr<Observable<SDL_MouseButtonEvent>> mouse_up;
     static const std::unique_ptr<Observable<SDL_MouseButtonEvent>> mouse_down;
@@ -44,7 +48,7 @@ public:
                     EventEmitter::key_up->notify(e.key.keysym.scancode);
                     break;
                 case SDL_KEYDOWN:
-                    EventEmitter::key_down->notify(e.key.keysym.scancode);
+                    EventEmitter::unfiltered_key_down->notify(e.key.keysym.scancode);
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                     EventEmitter::mouse_down->notify(e.button);
@@ -58,7 +62,13 @@ public:
     }
 };
 
+const SDL_Scancode EventEmitter::QUIT_KEY = SDL_SCANCODE_ESCAPE;
+
+const SDL_Scancode EventEmitter::PAUSE_KEY = SDL_SCANCODE_P;
+
 const std::unique_ptr<Observable<bool>> EventEmitter::system_quit = std::make_unique<Observable<bool>>("system_quit");
+
+const std::unique_ptr<Observable<bool>> EventEmitter::system_pause = std::make_unique<Observable<bool>>("system_pause");
 
 const std::unique_ptr<Observable<bool>> EventEmitter::system_tick = std::make_unique<Observable<bool>>("system_tick");
 
@@ -80,7 +90,22 @@ const std::shared_ptr<Observable<SDL_Renderer*>> EventEmitter::render_background
 
 const std::unique_ptr<Observable<SDL_Scancode>> EventEmitter::key_up = std::make_unique<Observable<SDL_Scancode>>("key_up");
 
-const std::unique_ptr<Observable<SDL_Scancode>> EventEmitter::key_down = std::make_unique<Observable<SDL_Scancode>>("key_down");
+const std::unique_ptr<Observable<SDL_Scancode>> EventEmitter::unfiltered_key_down = std::make_unique<Observable<SDL_Scancode>>("unfiltered_key_down");
+
+const std::shared_ptr<Observable<SDL_Scancode>> EventEmitter::key_down = EventEmitter::unfiltered_key_down->then("unfiltered_key_down", [] (const SDL_Scancode& sc) {
+    switch(sc) {
+        case EventEmitter::PAUSE_KEY:
+            std::cout << "Pause key pressed." << std::endl;
+            EventEmitter::system_pause->notify(true);
+            return false;
+        case EventEmitter::QUIT_KEY:
+            std::cout << "Quit key pressed." << std::endl;
+            EventEmitter::system_quit->notify(true);
+            return false;
+        default:
+            return true;
+    }
+});
 
 const std::unique_ptr<Observable<SDL_MouseButtonEvent>> EventEmitter::mouse_up = std::make_unique<Observable<SDL_MouseButtonEvent>>("mouse_up");
 

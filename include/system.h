@@ -16,7 +16,7 @@
 class System {
     SDL_Window* gWindow;
     SDL_Renderer* gRenderer;
-    bool quit;
+    bool quit, paused;
     Controller controller;
 public:
     static const int PERIOD;
@@ -43,22 +43,23 @@ public:
             return true;
         });
         
-        controller.add_keydown_handler("quit on Escape", [this] (const SDL_Scancode& sc) {
-            if(sc != SDL_SCANCODE_ESCAPE) return false;
-            this->controller.system_quit();
+        EventEmitter::system_pause->then("toggle_system_pause", [this] (const bool&) {
+            this->paused = ! this->paused;
             return true;
         });
+        
     }
     
     void main_loop() {
         auto a = Swordman(100,100);
         quit = false;
+        paused = false;
         while(!quit) {
             EventEmitter::handle_input(quit);
             if(quit) break;
-            
+            if(this->paused) continue;
             EventEmitter::system_update->notify(true);
-            
+
             SDL_SetRenderDrawColor(gRenderer, 255,0,0,255);
             SDL_RenderClear(gRenderer);
             EventEmitter::system_render->notify(gRenderer);
