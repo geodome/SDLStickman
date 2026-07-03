@@ -76,17 +76,18 @@ const std::unique_ptr<Observable<bool>> EventEmitter::system_update = std::make_
 
 const std::unique_ptr<Observable<SDL_Renderer*>> EventEmitter::system_render = std::make_unique<Observable<SDL_Renderer*>>("system_render");
 
-const std::shared_ptr<Observable<SDL_Renderer*>> EventEmitter::render_foreground = EventEmitter::system_render->then("render_foreground", [] (SDL_Renderer*) {
+const std::shared_ptr<Observable<SDL_Renderer*>> EventEmitter::render_background = EventEmitter::system_render->then("render_background", [] (SDL_Renderer*) {
     return true;
 });
 
-const std::shared_ptr<Observable<SDL_Renderer*>> EventEmitter::render_midground = EventEmitter::render_foreground->then("render_midground", [] (SDL_Renderer*) {
+const std::shared_ptr<Observable<SDL_Renderer*>> EventEmitter::render_midground = EventEmitter::render_background->then("render_midground", [] (SDL_Renderer*) {
     return true;
 });
 
-const std::shared_ptr<Observable<SDL_Renderer*>> EventEmitter::render_background = EventEmitter::render_foreground->then("render_background", [] (SDL_Renderer*) {
+const std::shared_ptr<Observable<SDL_Renderer*>> EventEmitter::render_foreground = EventEmitter::render_midground->then("render_foreground", [] (SDL_Renderer*) {
     return true;
 });
+
 
 const std::unique_ptr<Observable<SDL_Scancode>> EventEmitter::key_up = std::make_unique<Observable<SDL_Scancode>>("key_up");
 
