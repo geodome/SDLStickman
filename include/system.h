@@ -12,6 +12,7 @@
 #include "eventemitter.h"
 #include "entity.h"
 #include "swordman.h"
+#include "canvas.h"
 
 class System {
     SDL_Window* gWindow;
@@ -51,16 +52,22 @@ public:
     }
     
     void main_loop() {
+        // put swordman on a grey background
         auto a = Swordman(100,100);
+        auto c = Canvas(120,120,120,0);
+        
         quit = false;
         paused = false;
         while(!quit) {
             EventEmitter::handle_input(quit);
             if(quit) break;
-            if(this->paused) continue;
+            if(paused) {
+                continue;
+                SDL_Delay(PERIOD);
+            }
             EventEmitter::system_update->notify(true);
 
-            SDL_SetRenderDrawColor(gRenderer, 255,0,0,255);
+            SDL_SetRenderDrawColor(gRenderer, 0,0,0,255);
             SDL_RenderClear(gRenderer);
             EventEmitter::system_render->notify(gRenderer);
             SDL_RenderPresent(gRenderer);
@@ -72,7 +79,7 @@ public:
     
     ~System() {
         EventEmitter::system_quit->erase("quit_main_loop");
-        
+        EventEmitter::system_pause->erase("toggle_system_pause");
         SDL_DestroyRenderer(gRenderer);
         SDL_DestroyWindow(gWindow);
         SDL_Quit();
