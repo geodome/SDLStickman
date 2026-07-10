@@ -6,6 +6,8 @@
 #include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_events.h>
 #include "observable.h"
+#include "vector2d.h"
+#include "viewport.h"
 
 enum RenderOrder {
     BACKGROUND,
@@ -22,10 +24,12 @@ public:
     static const std::unique_ptr<Observable<bool>> system_tick;
     static const std::unique_ptr<Observable<bool>> system_update;
     
-    static const std::unique_ptr<Observable<SDL_Renderer*>> system_render;
-    static const std::shared_ptr<Observable<SDL_Renderer*>> render_background;
-    static const std::shared_ptr<Observable<SDL_Renderer*>> render_midground;
-    static const std::shared_ptr<Observable<SDL_Renderer*>> render_foreground;
+    static const std::unique_ptr<Observable2<Viewport*, SDL_Renderer*>> system_render;
+    static const std::shared_ptr<Observable2<Viewport*, SDL_Renderer*>> render_background;
+    static const std::shared_ptr<Observable2<Viewport*, SDL_Renderer*>> render_midground;
+    static const std::shared_ptr<Observable2<Viewport*, SDL_Renderer*>> render_foreground;
+    
+    static const std::unique_ptr<Observable<Viewport*>> viewport_update;
 
     static const std::unique_ptr<Observable<SDL_Scancode>> key_up;
     static const std::unique_ptr<Observable<SDL_Scancode>> unfiltered_key_down;
@@ -74,17 +78,17 @@ const std::unique_ptr<Observable<bool>> EventEmitter::system_tick = std::make_un
 
 const std::unique_ptr<Observable<bool>> EventEmitter::system_update = std::make_unique<Observable<bool>>("system_update");
 
-const std::unique_ptr<Observable<SDL_Renderer*>> EventEmitter::system_render = std::make_unique<Observable<SDL_Renderer*>>("system_render");
+const std::unique_ptr<Observable2<Viewport*, SDL_Renderer*>> EventEmitter::system_render = std::make_unique<Observable2<Viewport*, SDL_Renderer*>>("system_render");
 
-const std::shared_ptr<Observable<SDL_Renderer*>> EventEmitter::render_background = EventEmitter::system_render->then("render_background", [] (SDL_Renderer*) {
+const std::shared_ptr<Observable2<Viewport*, SDL_Renderer*>> EventEmitter::render_background = EventEmitter::system_render->then("render_background", [] (Viewport*, SDL_Renderer*) {
     return true;
 });
 
-const std::shared_ptr<Observable<SDL_Renderer*>> EventEmitter::render_midground = EventEmitter::render_background->then("render_midground", [] (SDL_Renderer*) {
+const std::shared_ptr<Observable2<Viewport*, SDL_Renderer*>> EventEmitter::render_midground = EventEmitter::render_background->then("render_midground", [] (Viewport*, SDL_Renderer*) {
     return true;
 });
 
-const std::shared_ptr<Observable<SDL_Renderer*>> EventEmitter::render_foreground = EventEmitter::render_midground->then("render_foreground", [] (SDL_Renderer*) {
+const std::shared_ptr<Observable2<Viewport*, SDL_Renderer*>> EventEmitter::render_foreground = EventEmitter::render_midground->then("render_foreground", [] (Viewport*, SDL_Renderer*) {
     return true;
 });
 
@@ -123,5 +127,7 @@ const std::shared_ptr<Observable<SDL_MouseButtonEvent>> EventEmitter::mouse_doub
 const std::shared_ptr<Observable<SDL_MouseButtonEvent>> EventEmitter::mouse_right_click = EventEmitter::mouse_down->then("mouse_right_click", [] (const SDL_MouseButtonEvent& e) {
     return e.button == 2 && e.clicks == 1;
 });
+
+const std::unique_ptr<Observable<Viewport*>> EventEmitter::viewport_update = std::make_unique<Observable<Viewport*>>("viewport_update");
 
 #endif

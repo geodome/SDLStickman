@@ -36,6 +36,10 @@ public:
         EventEmitter::system_quit->notify(true);
     }
     
+    void toggle_pause() {
+        EventEmitter::system_pause->notify(true);
+    }
+    
     void add_keyup_handler(const std::string& n, std::function<bool(SDL_Scancode)> handler) {
         auto name = std::format("Controller {} : {}", uuid, n);
         EventEmitter::key_up->then(name, handler);

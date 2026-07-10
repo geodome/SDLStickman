@@ -13,20 +13,22 @@
 #include "entity.h"
 #include "swordman.h"
 #include "canvas.h"
+#include "demomap.h"
+#include "global.h"
 
 class System {
     SDL_Window* gWindow;
     SDL_Renderer* gRenderer;
     bool quit, paused;
     Controller controller;
+    Viewport viewport;
 public:
     static const int PERIOD;
-    static const int WINDOW_WIDTH, WINDOW_HEIGHT;
     System() {
         if(SDL_Init(SDL_INIT_VIDEO) < 0) {
             throw SDL_Cannot_Init(SDL_GetError());
         }
-        gWindow = SDL_CreateWindow("Stickman Animation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, System::WINDOW_WIDTH, System::WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+        gWindow = SDL_CreateWindow("Stickman Animation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Global::WINDOW_WIDTH, Global::WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
         if(gWindow == nullptr) {
             SDL_Quit();
             throw SDL_Cannot_Init(SDL_GetError());
@@ -40,6 +42,7 @@ public:
         }
         
         EventEmitter::system_quit->then("quit_main_loop", [this] (const bool&) {
+            std::cout << "quiting";
             this->quit = true;
             return true;
         });
@@ -52,24 +55,23 @@ public:
     }
     
     void main_loop() {
-        // put swordman on a grey background
-        auto a = Swordman(100,100);
-        auto c = Canvas(120,120,120,0);
-        
+        auto d = DemoMap();
+        auto s = Swordman(0,0);
         quit = false;
         paused = false;
         while(!quit) {
             EventEmitter::handle_input(quit);
             if(quit) break;
             if(paused) {
-                continue;
                 SDL_Delay(PERIOD);
+                continue;
             }
             EventEmitter::system_update->notify(true);
+            EventEmitter::viewport_update->notify(&viewport);
 
-            SDL_SetRenderDrawColor(gRenderer, 0,0,0,255);
+            SDL_SetRenderDrawColor(gRenderer, 0xd3,0xd3,0xd3,0xff);
             SDL_RenderClear(gRenderer);
-            EventEmitter::system_render->notify(gRenderer);
+            EventEmitter::system_render->notify(&viewport, gRenderer);
             SDL_RenderPresent(gRenderer);
         
             EventEmitter::system_tick->notify(true);
@@ -80,6 +82,7 @@ public:
     ~System() {
         EventEmitter::system_quit->erase("quit_main_loop");
         EventEmitter::system_pause->erase("toggle_system_pause");
+        EventEmitter::viewport_update->erase("update_origin");
         SDL_DestroyRenderer(gRenderer);
         SDL_DestroyWindow(gWindow);
         SDL_Quit();
@@ -87,6 +90,5 @@ public:
 };
 
 const int System::PERIOD = 16; // this gives u 1000/16 = 60fps
-const int System::WINDOW_WIDTH = 1200, System::WINDOW_HEIGHT = 600;
 
 #endif

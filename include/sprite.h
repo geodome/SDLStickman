@@ -4,6 +4,7 @@
 #include <string>
 #include "eventemitter.h"
 #include "uuid.h"
+#include "viewport.h"
 
 class Sprite {
     RenderOrder ro;
@@ -29,7 +30,7 @@ public:
         update_handlers.push_back(name);
     }
     
-    void add_render_handler(const std::string& n, std::function<bool(SDL_Renderer*)> handler) {
+    void add_render_handler(const std::string& n, std::function<bool(Viewport*, SDL_Renderer*)> handler) {
         std::string name;
         switch(ro) {
             case RenderOrder::BACKGROUND:

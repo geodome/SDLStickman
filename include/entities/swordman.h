@@ -7,6 +7,7 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2_image/SDL_image.h>
 #include "entity.h"
+#include "viewport.h"
 
 enum SwordmanState {
     ARMED_IDLE_FORWARD,
@@ -35,7 +36,7 @@ class Swordman: public Entity {
     static const int SOURCE_WIDTH, SOURCE_HEIGHT, DEST_WIDTH, DEST_HEIGHT;
     static const double UNIT;
     static const uint32_t PERIOD;
-    SDL_Rect source{0,0,Swordman::SOURCE_WIDTH, Swordman::SOURCE_HEIGHT}, dest{0,0,Swordman::DEST_WIDTH, Swordman::DEST_HEIGHT};
+    SDL_Rect source{96,96,320,320}, dest{0,0,Swordman::DEST_WIDTH, Swordman::DEST_HEIGHT};
     SDL_Texture* current;
     SDL_Texture* armed_idle[8];
     SDL_Texture* armed_walk[8];
@@ -116,12 +117,17 @@ class Swordman: public Entity {
     
 public:
     Swordman(double x, double y, bool forward = true): Entity(EntityRole::PLAYER) {
-        position = {x,y,0,0,0,0};
+        position = {x,y,0,-4,0,0};
         set_state(UNARMED_IDLE_FORWARD);
         if(!forward) set_state(UNARMED_IDLE_BACKWARD);
         setup_sprite();
         setup_controller();
     }
+    
+    bool on_ladder() {
+        return false;
+    }
+    
     ~Swordman() {
         if(!loaded) return;
         for(int i=0; i<8;i++) {
@@ -502,8 +508,6 @@ public:
             return true;
         });
         sprite.add_update_handler("update handler", [this] (const bool&) {
-            this->dest.x = this->position.coord.x;
-            this->dest.y = this->position.coord.y;
             switch(this->state) {
                 case ARMED_IDLE_FORWARD:
                 case ARMED_IDLE_BACKWARD:
@@ -544,8 +548,11 @@ public:
             return true;
         });
         
-        sprite.add_render_handler("render handler", [this] (SDL_Renderer* gRenderer) {
+        sprite.add_render_handler("render handler", [this] (Viewport* vp, SDL_Renderer* gRenderer) {
             this->load_media(gRenderer);
+            auto coord = vp->translate(this->position.coord);
+            this->dest.x = coord.x;
+            this->dest.y = coord.y;
             SDL_RenderCopyEx(gRenderer, this->current, &(this->source), &(this->dest), 0, nullptr, this->flip);
             return true;
         });
@@ -608,7 +615,7 @@ public:
 };
 
 const int Swordman::SOURCE_WIDTH = 512, Swordman::SOURCE_HEIGHT = 512;
-const int Swordman::DEST_WIDTH = 400, Swordman::DEST_HEIGHT = 400;
+const int Swordman::DEST_WIDTH = 2*64, Swordman::DEST_HEIGHT = 2*64;
 const uint32_t Swordman::PERIOD = 10;
 const double Swordman::UNIT = 1;
 
