@@ -1,7 +1,15 @@
-# SDLStickman v0.3.0
+# SDLStickman v0.4.0
+
+![App Demo](https://github.com/geodome/SDLStickman/blob/main/demo/Stickman_Animation_v0.4.0.gif )  
+
+Implemented the following:
+* Seperate declaration and implementation of the header files
+* Introduce a viewport to provide for horizontal scrolling
+* Introduced a game map for the Player to traverse
+
+## SDLStickman v0.3.0
 
 ![App Demo](https://github.com/geodome/SDLStickman/blob/main/demo/Stickman_Animation_v0.3.0.gif )  
-
 
 He yields a sword and strikes fear in his enemy's heart.
 
