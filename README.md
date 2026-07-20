@@ -7,6 +7,9 @@ Implemented the following:
 * Introduce a viewport to provide for horizontal scrolling
 * Introduced a game map for the Player to traverse
 
+### Next Phase
+* Physics subsystem
+
 ## SDLStickman v0.3.0
 
 ![App Demo](https://github.com/geodome/SDLStickman/blob/main/demo/Stickman_Animation_v0.3.0.gif )  
