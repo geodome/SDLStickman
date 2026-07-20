@@ -16,10 +16,8 @@ TiledMap::TiledMap(): Entity(EntityRole::CANVAS) {
                 x = 64*c;
                 y = 64*r;
                 auto coord = vp->translate({x,y});
-                std::cout << x << " " << y << " " << coord << " vp\n";
                 switch(grid[r][c]) {
                     case None:
-                        //std::cout << "none\n";
                         break;
                     case CobbledBlock:
                         src = {0,0,UNIT,UNIT};
@@ -47,7 +45,6 @@ TiledMap::TiledMap(): Entity(EntityRole::CANVAS) {
             }
             
         }
-        std::cout << "completed\n";
         return true;
     });
 }

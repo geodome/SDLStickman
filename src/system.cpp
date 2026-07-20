@@ -35,7 +35,7 @@ System::System() {
 
 void System::main_loop() {
     auto d = DemoMap();
-    auto s = Swordman(0,0);
+    auto s = Swordman(2*UNIT,8*UNIT+10);
     quit = false;
     paused = false;
     while(!quit) {

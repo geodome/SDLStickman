@@ -16,9 +16,8 @@ RenderOrder Entity::get_render_order(EntityRole r) {
 
 Entity::Entity(EntityRole r): uuid{generate_uuid_v4()}, role{r}, ro{get_render_order(r)}, shape{get_render_order(r)}, sprite{get_render_order(r)} {
     if(r == EntityRole::ALL) throw std::invalid_argument("EntityRole::ALL not valid for Entity");
-    if(r == EntityRole::PLAYER) add_viewport_handler("viewport_update", [this] (Viewport* vp) {
+    if(r == EntityRole::PLAYER) add_viewport_handler("viewport_update_by_player_entity", [this] (Viewport* vp) {
         vp->update_origin(this->position.coord);
-        std::cout << "update " << this->position.coord << " " << vp->origin << "\n";
         return true;
     });
 }

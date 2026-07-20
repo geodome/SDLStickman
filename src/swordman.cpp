@@ -1,11 +1,8 @@
 #include "swordman.h"
 
-
 const int Swordman::SOURCE_WIDTH = 512, Swordman::SOURCE_HEIGHT = 512;
 const int Swordman::DEST_WIDTH = 2*64, Swordman::DEST_HEIGHT = 2*64;
 const uint32_t Swordman::PERIOD = 10;
-
-
 
 void Swordman::set_state(SwordmanState s) {
     int vx = 4;
@@ -512,8 +509,10 @@ void Swordman::setup_sprite() {
         auto coord = vp->translate(this->position.coord);
         this->dest.x = coord.x;
         this->dest.y = coord.y;
+#ifdef DEBUG_MODE
         SDL_SetRenderDrawColor(gRenderer, 255,0,0,255);
         SDL_RenderDrawRect(gRenderer, &(this->dest));
+#endif
         SDL_RenderCopyEx(gRenderer, this->current, &(this->source), &(this->dest), 0, nullptr, this->flip);
         return true;
     });
