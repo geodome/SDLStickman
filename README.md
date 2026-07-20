@@ -2,10 +2,11 @@
 
 ![App Demo](https://github.com/geodome/SDLStickman/blob/main/demo/Stickman_Animation_v0.4.0.gif )  
 
-Implemented the following:
+### Improvement over v0.3.0
 * Seperate declaration and implementation of the header files
 * Introduce a viewport to provide for horizontal scrolling
 * Introduced a game map for the Player to traverse
+* Refactored State Machine for Swordman Sprite
 
 ### Next Phase
 * Physics subsystem
