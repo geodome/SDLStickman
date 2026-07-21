@@ -13,6 +13,9 @@ The Swordman navigates the world
 ### Next Phase
 * Physics subsystem
 
+### Setup
+* Requires C++ 20 and SDL2
+
 ## SDLStickman v0.3.0
 
 He yields a sword and strikes fear in his enemy's heart.
