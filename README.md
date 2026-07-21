@@ -1,5 +1,7 @@
 # SDLStickman v0.4.0
 
+The Swordman navigates the world
+
 ![App Demo](https://github.com/geodome/SDLStickman/blob/main/demo/Stickman_Animation_v0.4.0.gif )  
 
 ### Improvement over v0.3.0
@@ -13,9 +15,9 @@
 
 ## SDLStickman v0.3.0
 
-![App Demo](https://github.com/geodome/SDLStickman/blob/main/demo/Stickman_Animation_v0.3.0.gif )  
-
 He yields a sword and strikes fear in his enemy's heart.
+
+![App Demo](https://github.com/geodome/SDLStickman/blob/main/demo/Stickman_Animation_v0.3.0.gif )  
 
 ### How to play
 
@@ -58,6 +60,8 @@ To work on BoundingBox logic and enable new Entities like villian and walls inte
 
 Simple Stickman Animation using SDL2
 
+![App Demo](https://github.com/geodome/SDLStickman/blob/main/demo/Stickman_Animation_v0.2.1.gif )  
+
 A stickman running across the Window. 
 
 His movement can be paused by pressing the space bar and his direction is set by the  W,A,S,D keys.
@@ -78,6 +82,8 @@ The nexxt phase will explore tiled maps, placement and interaction between vario
 ## SDLStickman v0.1.0
 
 Simple Stickman Animation using SDL2
+
+![App Demo](https://github.com/geodome/SDLStickman/blob/main/demo/Stickman_Animation_v0.1.0.gif )  
 
 4 individual stickman walking at different speeds. Each stickman can be individually suspended by clicking it.
 
