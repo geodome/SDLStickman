@@ -521,49 +521,49 @@ void Swordman::setup_sprite() {
 void Swordman::load_media(SDL_Renderer* gRenderer) {
     if(loaded) return;
     for(int i = 0; i<11; i++) {
-        auto path = std::format("/Users/donaldsontan/Projects/mtd215/mtd215/assets/{}/{:02}.png", "armed_attack", i);
+        auto path = std::format("/Users/donaldsontan/Projects/SDLStickman/SDLStickman/assets/{}/{:02}.png", "armed_attack", i);
         SDL_Surface* s = IMG_Load(path.c_str());
         if(s == nullptr) throw SDL_Cannot_Load_Media(path, SDL_GetError());
         armed_attack[i] = SDL_CreateTextureFromSurface(gRenderer, s);
         SDL_FreeSurface(s);
     }
     for(int i = 0; i<8; i++) {
-        auto path = std::format("/Users/donaldsontan/Projects/mtd215/mtd215/assets/{}/{:02}.png", "armed_idle", i);
+        auto path = std::format("/Users/donaldsontan/Projects/SDLStickman/SDLStickman/assets/{}/{:02}.png", "armed_idle", i);
         SDL_Surface* s = IMG_Load(path.c_str());
         if(s == nullptr) throw SDL_Cannot_Load_Media(path, SDL_GetError());
         armed_idle[i] = SDL_CreateTextureFromSurface(gRenderer, s);
         SDL_FreeSurface(s);
     }
     for(int i = 0; i<8; i++) {
-        auto path = std::format("/Users/donaldsontan/Projects/mtd215/mtd215/assets/{}/{:02}.png", "armed_walk", i);
+        auto path = std::format("/Users/donaldsontan/Projects/SDLStickman/SDLStickman/assets/{}/{:02}.png", "armed_walk", i);
         SDL_Surface* s = IMG_Load(path.c_str());
         if(s == nullptr) throw SDL_Cannot_Load_Media(path, SDL_GetError());
         armed_walk[i] = SDL_CreateTextureFromSurface(gRenderer, s);
         SDL_FreeSurface(s);
     }
     for(int i = 0; i<8; i++) {
-        auto path = std::format("/Users/donaldsontan/Projects/mtd215/mtd215/assets/{}/{:02}.png", "unarmed_idle", i);
+        auto path = std::format("/Users/donaldsontan/Projects/SDLStickman/SDLStickman/assets/{}/{:02}.png", "unarmed_idle", i);
         SDL_Surface* s = IMG_Load(path.c_str());
         if(s == nullptr) throw SDL_Cannot_Load_Media(path, SDL_GetError());
         unarmed_idle[i] = SDL_CreateTextureFromSurface(gRenderer, s);
         SDL_FreeSurface(s);
     }
     for(int i = 0; i<8; i++) {
-        auto path = std::format("/Users/donaldsontan/Projects/mtd215/mtd215/assets/{}/{:02}.png", "unarmed_walk", i);
+        auto path = std::format("/Users/donaldsontan/Projects/SDLStickman/SDLStickman/assets/{}/{:02}.png", "unarmed_walk", i);
         SDL_Surface* s = IMG_Load(path.c_str());
         if(s == nullptr) throw SDL_Cannot_Load_Media(path, SDL_GetError());
         unarmed_walk[i] = SDL_CreateTextureFromSurface(gRenderer, s);
         SDL_FreeSurface(s);
     }
     for(int i = 0; i<4; i++) {
-        auto path = std::format("/Users/donaldsontan/Projects/mtd215/mtd215/assets/{}/{:02}.png", "unarmed_climb", i);
+        auto path = std::format("/Users/donaldsontan/Projects/SDLStickman/SDLStickman/assets/{}/{:02}.png", "unarmed_climb", i);
         SDL_Surface* s = IMG_Load(path.c_str());
         if(s == nullptr) throw SDL_Cannot_Load_Media(path, SDL_GetError());
         unarmed_climb[i] = SDL_CreateTextureFromSurface(gRenderer, s);
         SDL_FreeSurface(s);
     }
     for(int i = 0; i<4; i++) {
-        auto path = std::format("/Users/donaldsontan/Projects/mtd215/mtd215/assets/{}/{:02}.png", "armed_climb", i);
+        auto path = std::format("/Users/donaldsontan/Projects/SDLStickman/SDLStickman/assets/{}/{:02}.png", "armed_climb", i);
         SDL_Surface* s = IMG_Load(path.c_str());
         if(s == nullptr) throw SDL_Cannot_Load_Media(path, SDL_GetError());
         armed_climb[i] = SDL_CreateTextureFromSurface(gRenderer, s);
