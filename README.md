@@ -14,7 +14,7 @@ The Swordman navigates the world
 * Physics subsystem
 
 ### Setup
-* Requires C++ 20 and SDL2
+* Requires C++ 17 and SDL2
 
 ## SDLStickman v0.3.0
 
