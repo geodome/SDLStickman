@@ -50,7 +50,9 @@ void System::main_loop() {
 
         SDL_SetRenderDrawColor(gRenderer, 0xd3,0xd3,0xd3,0xff);
         SDL_RenderClear(gRenderer);
-        EventEmitter::system_render->notify(&viewport, gRenderer);
+        EventEmitter::render_background->notify(&viewport, gRenderer);
+        EventEmitter::render_midground->notify(&viewport, gRenderer);
+        EventEmitter::render_foreground->notify(&viewport, gRenderer);
         SDL_RenderPresent(gRenderer);
     
         EventEmitter::system_tick->notify(true);

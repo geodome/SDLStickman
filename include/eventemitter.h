@@ -24,10 +24,9 @@ public:
     static const std::unique_ptr<Observable<bool>> system_tick;
     static const std::unique_ptr<Observable<bool>> system_update;
     
-    static const std::unique_ptr<Observable2<Viewport*, SDL_Renderer*>> system_render;
-    static const std::shared_ptr<Observable2<Viewport*, SDL_Renderer*>> render_background;
-    static const std::shared_ptr<Observable2<Viewport*, SDL_Renderer*>> render_midground;
-    static const std::shared_ptr<Observable2<Viewport*, SDL_Renderer*>> render_foreground;
+    static const std::unique_ptr<Observable2<Viewport*, SDL_Renderer*>> render_background;
+    static const std::unique_ptr<Observable2<Viewport*, SDL_Renderer*>> render_midground;
+    static const std::unique_ptr<Observable2<Viewport*, SDL_Renderer*>> render_foreground;
     
     static const std::unique_ptr<Observable<Viewport*>> viewport_update;
 
