@@ -3,8 +3,8 @@
 
 #include <array>
 #include <stdexcept>
-#include "SDL2/SDL_render.h"
-#include "SDL2_image/SDL_image.h"
+#include "SDL_render.h"
+#include "SDL_image.h"
 #include "exceptions.h"
 #include "entity.h"
 

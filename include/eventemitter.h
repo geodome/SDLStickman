@@ -2,9 +2,9 @@
 #define EVENTEMITTER_H
 
 #include <memory>
-#include "SDL2/SDL_render.h"
-#include "SDL2/SDL_scancode.h"
-#include "SDL2/SDL_events.h"
+#include "SDL_render.h"
+#include "SDL_scancode.h"
+#include "SDL_events.h"
 #include "observable.h"
 #include "vector2d.h"
 #include "viewport.h"

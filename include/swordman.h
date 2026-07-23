@@ -4,8 +4,8 @@
 #include <string>
 #include <iostream>
 #include <format>
-#include "SDL2/SDL_render.h"
-#include "SDL2_image/SDL_image.h"
+#include "SDL_render.h"
+#include "SDL_image.h"
 #include "entity.h"
 #include "exceptions.h"
 
