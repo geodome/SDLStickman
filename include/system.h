@@ -1,7 +1,7 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #include "exceptions.h"
 #include "controller.h"
 #include "viewport.h"
