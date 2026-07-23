@@ -13,8 +13,11 @@ The Swordman navigates the world
 ### Next Phase
 * Physics subsystem
 
-### Setup
-* Requires C++ 17 and SDL2
+### XCode Setup
+* Min C++ 20 because C++ template / concept is used.
+* Add sdl2.framework, sdl2_image.framework, sdl2_ttf.framework to "Frameworks and Libraries" under General. Set as "embed and sign".
+* Add /opt/homebrew/include to "System Header Search Paths" under "Build Settings"
+
 
 ## SDLStickman v0.3.0
 

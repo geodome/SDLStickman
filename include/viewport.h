@@ -1,7 +1,7 @@
 #ifndef VIEWPORT_H
 #define VIEWPORT_H
 
-#include "SDL_render.h"
+#include <SDL2/SDL_render.h>
 #include "vector2d.h"
 #include "boundingbox.h"
 #include "global.h"

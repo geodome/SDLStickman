@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include <functional>
-#include "SDL_scancode.h"
-#include "SDL_events.h"
+#include <SDL2/SDL_scancode.h>
+#include <SDL2/SDL_events.h>
 #include "eventemitter.h"
 #include "uuid.h"
 
