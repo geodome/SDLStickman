@@ -21,7 +21,7 @@ struct Vector2D {
     
     Vector2D& operator/=(double k);
     
-    bool operator==(const Vector2D& other);
+    bool operator==(const Vector2D& other) const;
     
     double magnitude();
     

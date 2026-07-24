@@ -1,5 +1,6 @@
 #include "viewport.h"
 #include <gtest/gtest.h>
+#include <iostream>
 /*
  class Viewport {
     
@@ -16,8 +17,7 @@ public:
 
 TEST(ViewportTests, defaultOrigin) {
     Viewport v;
-    Vector2D zero{0,0};
-    EXPECT_EQ(v.origin.x, 0);
+    EXPECT_EQ(v.origin, Vector2D(0,0));
 }
 
 

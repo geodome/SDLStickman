@@ -9,7 +9,7 @@
 class Viewport {
     
 public:
-    Vector2D origin;
+    Vector2D origin{0,0};
     static const int LL, UL, WINDOW_WIDTH, WINDOW_HEIGHT;
     Viewport();
     ~Viewport();

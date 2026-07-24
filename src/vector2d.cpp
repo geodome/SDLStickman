@@ -67,6 +67,6 @@ std::ostream& operator<<(std::ostream& out, Vector2D other) {
     return out;
 }
 
-bool Vector2D::operator==(const Vector2D& other) {
+bool Vector2D::operator==(const Vector2D& other) const {
     return x == other.x && y == other.y;
 }
