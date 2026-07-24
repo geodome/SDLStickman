@@ -21,6 +21,8 @@ struct Vector2D {
     
     Vector2D& operator/=(double k);
     
+    bool operator==(const Vector2D& other);
+    
     double magnitude();
     
     Vector2D&  normalise() ;
