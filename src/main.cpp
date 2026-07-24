@@ -1,8 +1,8 @@
+#ifndef TEST_MODE
+
 #include <iostream>
 #include "exceptions.h"
 #include "system.h"
-
-#ifndef TEST_MODE
 
 int main(int argc, char* argv[]) {
     try {
@@ -20,13 +20,3 @@ int main(int argc, char* argv[]) {
 
 #endif
 
-#ifdef TEST_MODE
-
-#include <gtest/gtest.h>
-
-int main(int argc, char* argv[]) {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
-
-#endif
